@@ -1,0 +1,32 @@
+@keyframes pulse {
+  50% {
+    opacity: 50%;
+  }
+}
+
+@keyframes r-spin {
+  to {
+    transform: rotateZ(-1turn);
+  }
+}
+
+@keyframes life-cycle-active {
+  to {
+    background-color: var(--color-primary75);
+  }
+}
+@keyframes life-cycle-blink {
+  50% {
+    background-color: var(--color-primary75);
+  }
+}
+
+@keyframes left-right {
+  0% {
+    left: -100%;
+  }
+  50%,
+  100% {
+    left: 200%;
+  }
+}
