@@ -1,3 +1,5 @@
 # VueJs Playground
 
-![Logo](./src//assets/imgs/logo.svg)
+<p align="center">
+  <img src="./src//assets/imgs/logo.svg" alt="Logo" width="250">
+</p>
