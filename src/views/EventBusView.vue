@@ -1,6 +1,5 @@
 <script lang="ts">
-  import CoolButton from '@/components/_global/CoolButton.vue';
-  import EventBusChild from '@/components/EventBus/EventBusChild.vue';
+  import { CoolButton, EventBusChild } from '@/components';
 
   export default {
     name: 'EventBusViw',
@@ -36,7 +35,7 @@
     <CoolButton @clicked="makeOneHappy" class="text-xl">Random</CoolButton>
   </div>
 
-  <div class="flex flex-wrap items-center justify-center gap-5">
+  <div class="mb-5 flex flex-wrap items-center justify-center gap-5">
     <EventBusChild
       v-for="(_, i) in Array(childCount)
         .fill(0)

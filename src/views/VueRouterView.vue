@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import AppRoute from '@/components/_global/AppRoute.vue';
-  import CustomFieldset from '@/components/_global/CustomFieldset.vue';
+  import { CustomFieldset, AppRoute } from '@/components';
 
   defineOptions({ name: 'VueRouterView' });
 </script>
@@ -41,7 +40,7 @@
     <RouterLink class="custom-link" :to="{ name: 'posts' }">posts</RouterLink>
   </nav>
 
-  <CustomFieldset class="my-3">
+  <CustomFieldset class="">
     <AppRoute route-name="vueRouter">
       <div
         class="text-primary25 font-saira w-fit animate-pulse text-center text-[clamp(100px,35vw,200px)] opacity-75"

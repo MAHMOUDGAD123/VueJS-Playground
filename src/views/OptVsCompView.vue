@@ -1,17 +1,15 @@
 <script setup lang="ts">
   import { computed, ref, watch } from 'vue';
   import { _Storage } from '@/assets/tools/storage';
-  import CompositionAPIContent from '@/components/api/CompositionAPIContent.vue';
-  import OptionsAPIContent from '@/components/api/OptionsAPIContent.vue';
-  import APIModeSwitch from '@/components/_global/APIModeSwitch.vue';
   import { useStorage } from '@/hooks/useStorage';
+  import { CompositionAPIContent, APIModeSwitch, OptionsAPIContent } from '@/components';
 
   defineOptions({ name: 'OptVsCompView' });
 
   const detailsName = 'example';
   const apiChildCount = ref(0); // API Mode children count
 
-  const [apiMode, setApiMode] = useStorage<boolean>({
+  const apiMode = useStorage<boolean>({
     initialValue: false,
     storeKey: '__api_mode__',
     storeType: 'localStorage',
@@ -19,7 +17,7 @@
 
   /* API MODE */
   const toggleAPIMode = () => {
-    setApiMode(!apiMode.value);
+    apiMode.value = !apiMode.value;
   };
 
   /* SHOW ALL */
@@ -103,7 +101,7 @@
     </div>
   </div>
 
-  <div class="content mb-5">
+  <div class="content">
     <CompositionAPIContent
       v-if="apiMode"
       v-bind="{ showAll, showIndex, detailsName }"

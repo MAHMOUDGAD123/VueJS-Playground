@@ -30,6 +30,7 @@
   --transition-duration-global: 300ms;
   /* breakpoints */
   --breakpoint-xsm: 400px;
+  --breakpoint-xxsm: 300px;
   /* animations */
   --animate-r-spin: r-spin 1000ms infinite linear;
   --animate-life-cycle-active: life-cycle-active 500ms;
@@ -231,10 +232,10 @@
 
     &::before {
       content: '';
-      width: 50px;
+      width: 70px;
       height: 300%;
       position: absolute;
-      background-image: linear-gradient(to left, transparent, var(--color-primary50), transparent);
+      background-image: linear-gradient(to left, transparent, var(--color-primary25), transparent);
       top: 50%;
       left: 50%;
       translate: -50% -50%;
@@ -356,6 +357,14 @@
     font-family: monospace;
     background-color: color(from var(--color-secondary) srgb r g b / 0.5);
     color: var(--color-primary);
+  }
+
+  .custom-select-opt {
+    @apply bg-secondary text-primary border-primary75 rounded-se-sm rounded-ee-sm border-3 px-1 py-1.5;
+
+    & option {
+      @apply bg-inherit text-inherit;
+    }
   }
 }
 

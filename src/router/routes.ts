@@ -90,6 +90,15 @@ export const routes: readonly RouteType[] = [
     },
   },
   {
+    path: '/todo-app',
+    name: 'todoApp',
+    component: () => import('@/views/TodoApp.vue'),
+    meta: {
+      isNav: true,
+      title: 'Todo App',
+    },
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'notFound',
     component: () => import('@/views/NotFoundView.vue'),

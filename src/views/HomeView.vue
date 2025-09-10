@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <div class="mt-25 flex flex-col items-center gap-15">
+  <div class="mt-20 flex flex-col items-center gap-15">
     <img :src="vueLogo" alt="Logo" class="w-[200px]" />
     <div class="flex flex-col gap-10 text-center">
       <h1 class="text-4xl font-bold">Let's play</h1>

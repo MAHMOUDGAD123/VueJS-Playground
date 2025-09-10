@@ -1,5 +1,5 @@
 import { _Storage } from '@/assets/tools/storage';
-import { computed, ref, shallowRef, type ComputedRef } from 'vue';
+import { ref, shallowRef, watch } from 'vue';
 
 type StoreType = 'localStorage' | 'sessionStorage';
 type OptionsType = {
@@ -16,14 +16,19 @@ export const useStorage = <T>({
   storeType: StoreType;
   initialValue: T;
   options?: OptionsType;
-}): [ComputedRef<T>, (newValue: T) => void] => {
-  const value = _Storage.read<T>(storeKey, storeType) ?? initialValue;
-  const state = options?.shallowRef ? shallowRef(value) : ref(value);
+}) => {
+  const stored = _Storage.read<T>(storeKey, storeType) ?? initialValue;
+  const state = options?.shallowRef ? shallowRef(stored) : ref(stored);
 
-  const save = (newValue: T) => {
-    state.value = newValue;
-    _Storage.save<T>(storeKey, newValue, storeType);
-  };
+  watch(
+    state,
+    (newVal) => {
+      if (newVal !== null) {
+        _Storage.save(storeKey, newVal, storeType);
+      }
+    },
+    { deep: true },
+  );
 
-  return [computed(() => state.value), save];
+  return state;
 };

@@ -103,7 +103,7 @@
     </CustomFieldset>
 
     <CustomFieldset legend="Fetch">
-      <div class="flex w-full flex-col gap-5">
+      <div class="grid w-full gap-5">
         <section class="flex items-center justify-center gap-5">
           <button
             class="custom-button aspect-square w-10 rounded-full p-0"

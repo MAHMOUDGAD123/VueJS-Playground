@@ -14,7 +14,8 @@ type RouteName =
   | 'users'
   | 'user'
   | 'posts'
-  | 'post';
+  | 'post'
+  | 'todoApp';
 
 type RouteTitle =
   | 'Home'
@@ -25,4 +26,5 @@ type RouteTitle =
   | 'User'
   | 'Posts'
   | 'Post'
+  | 'Todo App'
   | '404';

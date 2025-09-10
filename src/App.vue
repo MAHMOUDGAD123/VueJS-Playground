@@ -1,9 +1,7 @@
 <script setup lang="ts">
   import { RouterView } from 'vue-router';
-  import MainHeader from './components/_global/MainHeader.vue';
-  import BackToTopBtn from './components/_global/BackToTopBtn.vue';
-  import MainFooter from './components/_global/MainFooter.vue';
   import { onMounted, onUnmounted } from 'vue';
+  import { MainHeader, BackToTopBtn, MainFooter } from './components';
 
   const abortController = new AbortController();
 

@@ -17,13 +17,13 @@
 
 <template>
   <div
-    class="switch-wrapper bg-card xsm:flex-row mx-auto my-5 flex w-fit flex-col items-center justify-center gap-3 rounded-xl px-7 py-5"
+    class="switch-wrapper bg-card xxsm:flex-row mx-auto my-5 flex w-fit flex-col items-center justify-center gap-3 rounded-xl px-7 py-5"
     :data-toggle-name="toggleName"
   >
     <span class="mode1" :style="{ opacity: state ? 0.5 : 1 }">{{ modes.one }}</span>
 
     <div class="switch">
-      <input type="checkbox" :checked="state" @change="() => emit('toggleStateEmit')" />
+      <input type="checkbox" .checked="state" @change="() => emit('toggleStateEmit')" />
       <span class="slider"></span>
     </div>
 

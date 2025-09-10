@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import type { StyleValue } from 'vue';
-
   defineOptions({
     name: 'CustomCheckbox',
   });
@@ -11,52 +9,47 @@
     size?: number;
   }>();
 
-  const model = defineModel({ required: true, default: false });
-  const iconStyle: StyleValue = {
-    fontSize: `${props.size || 25}px`,
-  };
+  const model = defineModel({ required: true });
+
+  const defaulSize = 25;
 </script>
 
 <template>
-  <div class="checkbox-wrapper">
-    <input type="checkbox" v-model="model" :name :id />
-    <i class="icon fa-solid fa-check-circle" :style="iconStyle"></i>
+  <div
+    class="checkbox-wrapper bg-secondary relative z-1 flex aspect-square items-center justify-center rounded-full transition-shadow contain-content"
+    :style="{
+      width: `${props.size || defaulSize}px`,
+    }"
+  >
+    <input
+      type="checkbox"
+      v-model="model"
+      :name
+      :id
+      class="absolute z-2 h-full w-full cursor-pointer appearance-none rounded-[inherit]"
+    />
+
+    <i
+      class="icon fa-solid fa-check-circle text-primary duration-global rounded-[inherit] transition-transform"
+      :style="{ fontSize: `${props.size || 25}px` }"
+    ></i>
   </div>
 </template>
 
 <style scoped>
   .checkbox-wrapper {
-    position: relative;
-    border-radius: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    contain: content;
-    z-index: 1;
-    background-color: var(--color-secondary);
-
     &:has(input:checked) {
       & > .icon {
         transform: none;
       }
     }
+
+    &:has(input:focus-visible) {
+      box-shadow: 0 0 0 3px var(--color-primary);
+    }
   }
 
   .icon {
-    color: var(--color-primary);
-    transition: transform var(--transition-duration-global);
     transform: scale(0);
-    transition: transform var(--transition-duration-global);
-  }
-
-  input[type='checkbox'] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    appearance: none;
-    padding: 5px 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    z-index: 2;
   }
 </style>

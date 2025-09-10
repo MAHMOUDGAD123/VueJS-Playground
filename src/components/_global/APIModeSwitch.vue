@@ -50,6 +50,7 @@
     top: 0;
     z-index: 50;
     margin-block: 40px 10px;
+    font-size: 0.85rem;
 
     &::before {
       content: '';
@@ -66,11 +67,11 @@
     }
 
     &.at-top {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
 
       & .switch {
-        --w: 32px;
-        --h: 17px;
+        --w: 30px;
+        --h: 15px;
       }
 
       &::before {
