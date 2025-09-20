@@ -20,14 +20,32 @@
     class="switch-wrapper bg-card xxsm:flex-row mx-auto my-5 flex w-fit flex-col items-center justify-center gap-3 rounded-xl px-7 py-5"
     :data-toggle-name="toggleName"
   >
-    <span class="mode1" :style="{ opacity: state ? 0.5 : 1 }">{{ modes.one }}</span>
+    <button
+      :class="`mode cursor-pointer ${!state ? 'text-text-pr' : 'text-text-sec'}`"
+      @click="
+        () => {
+          if (state) emit('toggleStateEmit');
+        }
+      "
+    >
+      {{ modes.one }}
+    </button>
 
     <div class="switch">
       <input type="checkbox" .checked="state" @change="() => emit('toggleStateEmit')" />
       <span class="slider"></span>
     </div>
 
-    <span class="mode2" :style="{ opacity: state ? 1 : 0.5 }">{{ modes.two }}</span>
+    <button
+      :class="`mode cursor-pointer ${state ? 'text-text-pr' : 'text-text-sec'}`"
+      @click="
+        () => {
+          if (!state) emit('toggleStateEmit');
+        }
+      "
+    >
+      {{ modes.two }}
+    </button>
   </div>
 </template>
 
@@ -49,11 +67,31 @@
       transition: var(--transition-duration-global);
     }
 
-    & > [class^='mode'] {
+    & > .mode {
       font-weight: bold;
       transition: all;
       transition: var(--transition-duration-global);
       padding-bottom: 1px;
+      position: relative;
+      text-box: trim-both cap alphabetic;
+
+      &::before {
+        content: '';
+        transition: opacity var(--transition-duration-global);
+        height: 4px;
+        background-color: var(--color-primary);
+        position: absolute;
+        top: 135%;
+        left: 50%;
+        translate: -50% 0;
+        width: 50%;
+        border-radius: 9999px;
+        opacity: 0;
+      }
+
+      &:focus-visible::before {
+        opacity: 1;
+      }
     }
   }
 
