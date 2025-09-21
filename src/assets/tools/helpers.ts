@@ -42,7 +42,7 @@ export const lazyFetch = <T>({
  randomDelay = false,
 }: LazyFetchOptions): Promise<{ data: T | null; err: Error | null; ok: boolean }> => {
  const delay = async () => {
-  await waitFor(randomDelay ? Math.random() * 1000 + 300 : ms);
+  await waitFor(randomDelay ? Math.random() * 300 + 100 : ms);
  };
 
  return new Promise((resolve) => {

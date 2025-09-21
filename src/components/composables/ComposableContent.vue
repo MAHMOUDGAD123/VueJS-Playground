@@ -27,25 +27,27 @@
 </script>
 
 <template>
- <h1
-  class="font-saira text-primary mt-7 mb-9 text-center text-3xl font-bold [text-transform:uppercase] select-none"
- >
-  composable
- </h1>
-
- <div class="flex flex-col justify-center gap-5">
-  <CustomDetails
-   v-for="({ summary, comp }, i) in examples"
-   name="example"
-   :summary
-   :key="i"
-   :open="i === opened"
-   @toggle-open="(open) => !open || (opened = i)"
+ <div>
+  <h1
+   class="font-saira text-primary mt-7 mb-9 text-center text-3xl font-bold [text-transform:uppercase] select-none"
   >
-   <div class="p-4">
-    <component :is="comp"></component>
-   </div>
-  </CustomDetails>
+   composable
+  </h1>
+
+  <div class="mx-auto flex max-w-[700px] flex-col justify-center gap-5">
+   <CustomDetails
+    v-for="({ summary, comp }, i) in examples"
+    name="example"
+    :summary
+    :key="i"
+    :open="i === opened"
+    @toggle-open="(open) => !open || (opened = i)"
+   >
+    <div class="p-4">
+     <component :is="comp"></component>
+    </div>
+   </CustomDetails>
+  </div>
  </div>
 </template>
 

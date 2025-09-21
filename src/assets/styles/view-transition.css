@@ -1,22 +1,22 @@
 /* Create a custom animation */
 @keyframes move-out {
-  from {
-    clip-path: circle(100%);
-  }
+ from {
+  clip-path: circle(100%);
+ }
 
-  to {
-    clip-path: circle(0%);
-  }
+ to {
+  clip-path: circle(0%);
+ }
 }
 
 @keyframes move-in {
-  from {
-    clip-path: circle(0%);
-  }
+ from {
+  clip-path: circle(0%);
+ }
 
-  to {
-    clip-path: circle(100%);
-  }
+ to {
+  clip-path: circle(100%);
+ }
 }
 
 /* Apply the custom animation to the old and new page states */
@@ -25,5 +25,5 @@
 } */
 
 ::view-transition-new(main) {
-  animation: 0.4s ease-in both move-in;
+ animation: 0.4s ease-in both move-in;
 }
