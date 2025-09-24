@@ -1,7 +1,7 @@
 <script setup lang="ts">
- import { defineAsyncComponent } from 'vue';
  import { CustomDetails } from '@/components';
  import { useStorage } from '@/hooks/useStorage';
+ import { lazyComponent } from '@/assets/tools/lazy-component';
 
  type ExampleType = {
   summary: string;
@@ -17,11 +17,11 @@
  const examples: ExampleType[] = [
   {
    summary: 'useMouseMove',
-   comp: defineAsyncComponent(() => import('@/components/composables/UseMouseMove.vue')),
+   comp: lazyComponent(() => import('@/components/composables/UseMouseMove.vue')),
   },
   {
    summary: 'useFetch',
-   comp: defineAsyncComponent(() => import('@/components/composables/UseFetch.vue')),
+   comp: lazyComponent(() => import('@/components/composables/UseFetch.vue')),
   },
  ];
 </script>
