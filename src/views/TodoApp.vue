@@ -2,6 +2,7 @@
  import { useStorage } from '@/hooks/useStorage';
  import { ref, useTemplateRef, watch, type Directive } from 'vue';
  import { TodosList } from '@/components';
+ import ScaleInTransition from '@/components/_global/ScaleInTransition.vue';
 
  // Template Elements
  // -----------------------------------------
@@ -120,9 +121,17 @@
 <template>
  <div>
   <!-- Title -->
-  <h1 class="font-saira text-primary mt-15 mb-20 text-center text-6xl font-extrabold select-none">
-   Todo App
-  </h1>
+  <Transition
+   appear
+   appear-from-class="opacity-0"
+   appear-active-class="transition-opacity duration-1500"
+   appear-to-class="opacity-100"
+   type="transition"
+  >
+   <h1 class="font-saira text-primary mt-15 mb-20 text-center text-6xl font-extrabold select-none">
+    Todo App
+   </h1>
+  </Transition>
 
   <!-- Form -->
   <form
@@ -130,7 +139,7 @@
    class="mx-auto flex max-w-2xl flex-col items-center gap-2 select-none *:rounded-sm sm:flex-row sm:items-stretch"
   >
    <div class="flex w-full flex-col gap-[inherit]">
-    <Transition name="scale-up" appear>
+    <ScaleInTransition :delay-index="0">
      <input
       ref="titleInput"
       autocomplete="off"
@@ -140,12 +149,11 @@
       placeholder="What todo?"
       v-model.lazy="todo.title"
       v-focus="'once'"
-      style="--i: 0"
      />
-    </Transition>
+    </ScaleInTransition>
 
-    <Transition name="scale-up" appear>
-     <label for="category" style="--i: 1">
+    <ScaleInTransition :delay-index="1">
+     <label for="category">
       <span class="label">Category</span>
 
       <div class="relative flex flex-1">
@@ -168,33 +176,35 @@
        </select>
       </div>
      </label>
-    </Transition>
+    </ScaleInTransition>
 
     <div class="flex w-full flex-col gap-2 *:flex-1 sm:flex-row">
-     <TransitionGroup name="scale-up" appear>
-      <label for="time-from" style="--i: 2" key="t1">
+     <ScaleInTransition :delay-index="2">
+      <label for="time-from">
        <span class="label">From</span>
        <input type="time" name="time-from" id="time-from" v-model.lazy="todo.from" />
       </label>
+     </ScaleInTransition>
 
-      <label for="time-to" style="--i: 3" key="t2">
+     <ScaleInTransition :delay-index="3">
+      <label for="time-to">
        <span class="label">To</span>
        <input ref="timeToSel" type="time" name="time-to" id="time-to" v-model.lazy="todo.to" />
       </label>
-     </TransitionGroup>
+     </ScaleInTransition>
     </div>
    </div>
 
-   <Transition name="scale-up" appear>
-    <button class="custom-button w-full text-3xl sm:w-fit" style="--i: 4">
+   <ScaleInTransition :delay-index="4">
+    <button class="custom-button w-full text-3xl sm:w-fit">
      <i class="fa-solid fa-plus"></i>
     </button>
-   </Transition>
+   </ScaleInTransition>
   </form>
 
   <!-- Filter -->
-  <Transition name="scale-up" appear>
-   <label for="filter" class="mx-auto my-9 w-fit" style="--i: 5">
+  <ScaleInTransition :delay-index="5">
+   <label for="filter" class="mx-auto my-9 w-fit">
     <span class="label">Filter</span>
 
     <div class="relative flex flex-1">
@@ -211,7 +221,7 @@
      </select>
     </div>
    </label>
-  </Transition>
+  </ScaleInTransition>
 
   <!-- Todos List -->
   <TodosList
@@ -291,19 +301,5 @@
    border-start-end-radius: 0;
    border-end-start-radius: 4px;
   }
- }
-
- /* Transitions */
- .scale-up-enter-active,
- .scale-up-leave-active {
-  transition-property: opacity, transform;
-  transition-duration: 1s;
-  transition-delay: calc(var(--i) * 0.2s);
-  transition-timing-function: ease, linear(0, 1, 0.5, 1);
- }
- .scale-up-enter-from,
- .scale-up-leave-to {
-  transform: scaleX(0.75) scaleY(0.75);
-  opacity: 0;
  }
 </style>

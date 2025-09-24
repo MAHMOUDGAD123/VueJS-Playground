@@ -56,6 +56,24 @@
     () => import('@/components/api/composition/AsyncComponents/AsyncCompParent.vue'),
    ),
   },
+  {
+   summary: '<KeepAlive> Demo',
+   comp: defineAsyncComponent(
+    () => import('@/components/api/composition/KeepAlive/KeepaliveComp.vue'),
+   ),
+  },
+  {
+   summary: '<Teleport> Demo',
+   comp: defineAsyncComponent(
+    () => import('@/components/api/composition/Teleport/TeleportDemo.vue'),
+   ),
+  },
+  {
+   summary: '<Suspense> Demo',
+   comp: defineAsyncComponent(
+    () => import('@/components/api/composition/Suspense/SuspenseDemo.vue'),
+   ),
+  },
  ];
 
  // Tell parent my child count

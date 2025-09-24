@@ -3,6 +3,7 @@
  import { _Storage } from '@/assets/tools/storage';
  import { useStorage } from '@/hooks/useStorage';
  import { CompositionAPIContent, APIModeSwitch, OptionsAPIContent } from '@/components';
+ import CustomRadioList from '@/components/_global/CustomRadioList.vue';
 
  defineOptions({ name: 'OptVsCompView' });
 
@@ -75,31 +76,14 @@
    </label>
 
    <!-- show indices -->
-   <div
+   <CustomRadioList
     v-if="!showAll"
     :key="apiMode ? 'comp' : 'opt'"
     class="border-secondary flex flex-wrap items-center justify-center gap-3 rounded-xl border-2 p-3"
-   >
-    <label
-     v-for="i in Array(apiChildCount)
-      .fill(0)
-      .map((_, i) => i)"
-     :key="i"
-     class="duration-global font-saira aspect-square w-[35px] cursor-pointer content-center rounded-full text-center transition-colors"
-     :style="{
-      backgroundColor: showIndex === i ? 'var(--color-primary)' : 'var(--color-secondary)',
-     }"
-    >
-     {{ i + 1 }}
-     <input
-      type="radio"
-      name="showIndex"
-      :value="showIndex"
-      @change="setShowIndex(i)"
-      class="pointer-events-none absolute opacity-0"
-     />
-    </label>
-   </div>
+    :radio-list-count="apiChildCount"
+    v-model="showIndex"
+    @index-change="(idx) => setShowIndex(idx)"
+   />
   </div>
 
   <div class="content">

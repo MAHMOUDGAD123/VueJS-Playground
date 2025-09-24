@@ -9,13 +9,13 @@
 <template>
  <div class="__skel_loader__">
   <slot>
-   <AppLoader />
+   <AppLoader class="__skel_ignore__" />
   </slot>
  </div>
 </template>
 
 <style>
- .__skel_loader__ div {
+ .__skel_loader__ div:not(.__skel_ignore__) {
   background-color: var(--color-secondary75);
   position: relative;
   display: flex;

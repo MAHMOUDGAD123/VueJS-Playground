@@ -6,6 +6,7 @@
   name?: string;
   defaultPlaceholder?: string;
  }>();
+
  const model = defineModel({ default: '' });
 </script>
 
@@ -15,7 +16,7 @@
    v-if="props.label"
    class="label"
    :style="{
-    minWidth: `${props.label ? props.label.length + 2 : labelWidthInCh}ch`,
+    minWidth: `${props.label ? (labelWidthInCh ? labelWidthInCh : props.label.length + 2) : 0}ch`,
    }"
   >
    {{ props.label }}

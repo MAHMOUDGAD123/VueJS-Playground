@@ -24,23 +24,40 @@
   (el as HTMLElement).style.setProperty('--leaving-top', rect.top - parentRect.top + 'px');
   (el as HTMLElement).style.setProperty('--leaving-left', rect.left - parentRect.left + 'px');
  };
+
+ const beforeAppear = (el: Element) => {
+  // Add transition delay to all list elements before appear
+  const ele = el as HTMLElement;
+  ele.style.transitionDelay = `calc(${ele.dataset.idx} * 0.2s)`;
+ };
+
+ const afterAppear = (el: Element) => {
+  // Remove transition delay from all list elements after appear
+  const ele = el as HTMLElement;
+  ele.style.transitionDelay = `0s`;
+ };
 </script>
 
 <template>
- <div class="border-secondary75 relative mx-auto mb-9 max-w-4xl rounded-md border-4 p-4">
+ <div
+  class="border-secondary75 relative mx-auto mb-9 max-w-4xl overflow-y-auto rounded-md border-4 p-4 [scrollbar-width:none]"
+ >
   <Transition name="show-up">
    <TransitionGroup
     v-if="todos.length > 0"
-    class="grid-auto-fill-250 relative grid w-full gap-4"
+    class="grid-auto-fill-250 relative grid max-h-[500px] w-full gap-4"
     tag="ul"
     appear
     name="insert"
     @before-leave="beforeLeave"
+    @before-appear="beforeAppear"
+    @after-appear="afterAppear"
    >
     <li
-     v-for="todo in todos"
+     v-for="(todo, i) in todos"
      :key="todo.id"
      class="bg-primary25 grid items-center gap-3 rounded-md p-3 text-center"
+     :data-idx="i"
     >
      <h2
       :class="`line-clamp-2 h-[2lh] content-center text-2xl font-bold ${todo.completed ? 'line-through' : 'no-underline'}`"
@@ -74,7 +91,7 @@
 
    <div
     v-else
-    class="text-primary75 flex h-full w-full items-center justify-center text-center text-2xl"
+    class="text-primary75 flex h-full w-full items-center justify-center text-center text-xl"
    >
     Nothing left to do....
    </div>
