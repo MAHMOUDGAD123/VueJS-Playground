@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router';
+import NotFoundView from '@/views/NotFoundView.vue';
 
 type RouteType = RouteRecordRaw & {
  path: RoutePath;
@@ -110,7 +111,7 @@ export const routes: readonly RouteType[] = [
  {
   path: '/:pathMatch(.*)*',
   name: 'notFound',
-  component: () => import('@/views/NotFoundView.vue'),
+  component: NotFoundView,
   meta: {
    title: '404',
    isNav: false,

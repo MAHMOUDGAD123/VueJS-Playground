@@ -9,7 +9,7 @@
 <template>
  <div class="__skel_loader__">
   <slot>
-   <AppLoader class="__skel_ignore__" />
+   <AppLoader />
   </slot>
  </div>
 </template>

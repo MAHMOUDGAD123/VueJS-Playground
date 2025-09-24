@@ -11,7 +11,7 @@
  const AsyncComponent = defineAsyncComponent({
   loader: async () => {
    await waitFor(rand({ min: 3000, max: 5000 }));
-   if (rand({ min: 1, max: 10 }) === 3) {
+   if (rand({ min: 1, max: 10 }) === 7) {
     throw 'Component failed to load AsyncComponent';
    }
    return import('@/components/api/composition/Suspense/AsyncComponent.vue');
@@ -21,7 +21,7 @@
  const UnSuspensibleComponent = defineAsyncComponent({
   loader: async () => {
    await waitFor(rand({ min: 7000, max: 15000 }));
-   if (rand({ min: 1, max: 10 }) === 7) {
+   if (rand({ min: 1, max: 10 }) === 3) {
     throw 'Component failed to load NoneSubpensibleComponent';
    }
    return import('@/components/api/composition/Suspense/UnSuspensibleComponent.vue');
@@ -37,11 +37,19 @@
   <SuspenseMe>
    <template #default>
     <CustomFieldset legend="Awaited Comp">
-     <AwatiedComponent />
+     <SuspenseMe suspensible>
+      <AwatiedComponent />
+     </SuspenseMe>
     </CustomFieldset>
 
     <CustomFieldset legend="Async Comp">
-     <AsyncComponent />
+     <SuspenseMe>
+      <AsyncComponent />
+
+      <template #fallback>
+       <div class="h-[27px] w-full rounded-md"></div>
+      </template>
+     </SuspenseMe>
     </CustomFieldset>
 
     <CustomFieldset legend="Async Comp">

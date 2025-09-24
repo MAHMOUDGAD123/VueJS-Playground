@@ -1,6 +1,7 @@
 <script lang="ts" setup>
  defineOptions({
   name: 'AppLoader',
+  inheritAttrs: false,
  });
 
  defineProps<{
@@ -9,9 +10,9 @@
 </script>
 
 <template>
- <div class="p-5">
+ <div class="__skel_ignore__ p-5">
   <div
-   class="spinner animate-r-spin mx-auto aspect-square rounded-full"
+   class="__skel_ignore__ spinner animate-r-spin mx-auto aspect-square rounded-full"
    :style="{ width: `${width || 50}px` }"
   ></div>
  </div>

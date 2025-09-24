@@ -1,6 +1,5 @@
 <script setup lang="ts">
  import { onErrorCaptured, ref } from 'vue';
- import { Timer } from '@/assets/tools/timer';
  import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
  import AppError from '@/components/_global/AppError.vue';
 
@@ -20,31 +19,26 @@
  }>();
 
  // Data
- let resolved = false;
  const isPending = ref(false);
  const error = ref<Error | null>(null);
- const timer = new Timer();
+ // const timer = new Timer();
 
  // Functions
  const onPending = () => {
-  timer.start();
+  // timer.start();
   isPending.value = true;
  };
  const onResolve = () => {
-  console.log(`@resolve after: ${timer.duration}`);
-  // Mark as resolved
-  resolved = true;
+  // console.log(`@resolve after: ${timer.duration}`);
   isPending.value = false;
  };
  const onFallback = () => {
-  console.log(`@Fallback after: ${timer.duration}`);
+  // console.log(`@Fallback after: ${timer.duration}`);
  };
 
  // Life cycle
  onErrorCaptured((err) => {
-  // Prevent any unsuspensible async components from throw an error after mark as resolved.
-  // So, any unsuspensible async component has to handle the error itself.
-  if (!resolved) error.value = err;
+  error.value = err;
   console.error(err);
   return false;
  });
