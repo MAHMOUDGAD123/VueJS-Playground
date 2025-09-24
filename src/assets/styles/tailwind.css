@@ -61,6 +61,7 @@
 
  main {
   view-transition-name: main;
+  @apply pb-7;
  }
 
  *,
