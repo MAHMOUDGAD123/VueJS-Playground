@@ -1,4 +1,3 @@
-import { lazyComponent } from '@/assets/tools/lazy-component';
 import type { RouteRecordRaw } from 'vue-router';
 
 type RouteType = RouteRecordRaw & {
@@ -19,7 +18,7 @@ export const routes: readonly RouteType[] = [
  {
   path: '/',
   name: 'home',
-  component: lazyComponent(() => import('@/views/HomeView.vue')),
+  component: () => import('@/views/HomeView.vue'),
   meta: {
    title: 'Home',
    isNav: false,
@@ -28,7 +27,7 @@ export const routes: readonly RouteType[] = [
  {
   path: '/opt-vs-comp',
   name: 'optVsComp',
-  component: lazyComponent(() => import('@/views/OptVsCompView.vue')),
+  component: () => import('@/views/OptVsCompView.vue'),
   meta: {
    title: 'Options Vs Composition',
    isNav: true,
@@ -37,7 +36,7 @@ export const routes: readonly RouteType[] = [
  {
   path: '/vue-router',
   name: 'vueRouter',
-  component: lazyComponent(() => import('@/views/VueRouterView.vue')),
+  component: () => import('@/views/VueRouterView.vue'),
   meta: {
    title: 'Vue Router',
    isNav: true,
@@ -46,7 +45,7 @@ export const routes: readonly RouteType[] = [
    {
     name: 'users',
     path: 'users',
-    component: lazyComponent(() => import('@/components/router/UsersRoute.vue')),
+    component: () => import('@/components/router/UsersRoute.vue'),
     meta: {
      title: 'Users',
     },
@@ -54,7 +53,7 @@ export const routes: readonly RouteType[] = [
      {
       name: 'user',
       path: ':userid',
-      component: lazyComponent(() => import('@/components/router/UserRoute.vue')),
+      component: () => import('@/components/router/UserRoute.vue'),
       meta: {
        title: 'User',
       },
@@ -64,7 +63,7 @@ export const routes: readonly RouteType[] = [
    {
     name: 'posts',
     path: 'posts',
-    component: lazyComponent(() => import('@/components/router/PostsRoute.vue')),
+    component: () => import('@/components/router/PostsRoute.vue'),
     meta: {
      title: 'Posts',
     },
@@ -72,7 +71,7 @@ export const routes: readonly RouteType[] = [
      {
       name: 'post',
       path: ':postid',
-      component: lazyComponent(() => import('@/components/router/PostRoute.vue')),
+      component: () => import('@/components/router/PostRoute.vue'),
       meta: {
        title: 'Post',
       },
@@ -84,7 +83,7 @@ export const routes: readonly RouteType[] = [
  {
   path: '/event-bus',
   name: 'eventBus',
-  component: lazyComponent(() => import('@/views/EventBusView.vue')),
+  component: () => import('@/views/EventBusView.vue'),
   meta: {
    isNav: true,
    title: 'Event Bus',
@@ -93,7 +92,7 @@ export const routes: readonly RouteType[] = [
  {
   path: '/todo-app',
   name: 'todoApp',
-  component: lazyComponent(() => import('@/views/TodoApp.vue')),
+  component: () => import('@/views/TodoApp.vue'),
   meta: {
    isNav: true,
    title: 'Todo App',
@@ -102,7 +101,7 @@ export const routes: readonly RouteType[] = [
  {
   path: '/composable',
   name: 'composable',
-  component: lazyComponent(() => import('@/views/ComposableView.vue')),
+  component: () => import('@/views/ComposableView.vue'),
   meta: {
    isNav: true,
    title: 'Composable',
@@ -111,7 +110,7 @@ export const routes: readonly RouteType[] = [
  {
   path: '/:pathMatch(.*)*',
   name: 'notFound',
-  component: lazyComponent(() => import('@/views/NotFoundView.vue')),
+  component: () => import('@/views/NotFoundView.vue'),
   meta: {
    title: '404',
    isNav: false,

@@ -1,5 +1,8 @@
 <script setup lang="ts">
- import ComposableContent from '@/components/composables/ComposableContent.vue';
+ import { lazyComponent } from '@/assets/tools/lazy-component';
+ const ComposableContent = lazyComponent(
+  () => import('@/components/composables/ComposableContent.vue'),
+ );
 </script>
 
 <template>

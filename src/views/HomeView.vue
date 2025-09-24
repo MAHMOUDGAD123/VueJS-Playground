@@ -1,30 +1,8 @@
 <script setup lang="ts">
-  import vueLogo from '@/assets/imgs/vue.svg';
-  import { routes } from '@/router';
-  import { RouterLink } from 'vue-router';
-
-  defineOptions({ name: 'HomeView' });
-
-  const navRoutes = routes.filter((route) => route.meta.isNav);
+ import { lazyComponent } from '@/assets/tools/lazy-component';
+ const HomeContent = lazyComponent(() => import('@/components/views/HomeContent.vue'));
 </script>
 
 <template>
-  <div class="mt-20 flex flex-col items-center gap-15">
-    <img :src="vueLogo" alt="Logo" class="w-[200px]" />
-    <div class="flex flex-col gap-10 text-center">
-      <h1 class="text-4xl font-bold">Let's play</h1>
-
-      <div
-        class="bg-primary10 border-primary flex flex-wrap justify-center gap-5 rounded-2xl border-2 p-7"
-      >
-        <RouterLink
-          v-for="route in navRoutes"
-          :to="{ name: route.name }"
-          :key="route.name"
-          class="custom-button"
-          >{{ route.meta.title }}</RouterLink
-        >
-      </div>
-    </div>
-  </div>
+ <HomeContent />
 </template>

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
- import { lazyFetch } from '@/assets/tools/helpers';
  import { onMounted, ref } from 'vue';
+ import { lazyFetch } from '@/assets/tools/helpers';
  import { useRoute } from 'vue-router';
- import AppRoute from '../_global/AppRoute.vue';
+ import AppRoute from '@/components/_global/AppRoute.vue';
 
  const route = useRoute();
  const params = route.params as { postid: string };
@@ -11,13 +11,13 @@
  const loading = ref(true);
 
  onMounted(async () => {
-  const { data, err, ok } = await lazyFetch({
+  const { data, err, ok } = await lazyFetch<PostData>({
    url: `https://jsonplaceholder.typicode.com/posts/${params.postid}`,
    ms: 100,
   });
 
   if (ok) {
-   post.value = data as PostData;
+   post.value = data!;
    document.title = `Post ${post.value.userId}/${post.value.id}`;
   } else {
    error.value = err;
