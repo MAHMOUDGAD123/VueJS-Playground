@@ -8,5 +8,5 @@
 </script>
 
 <template>
- <div v-if="showData" class="font-saira text-xl font-bold text-[#c586c0]">AwaitedComponent</div>
+ <div v-if="showData" class="font-saira text-xl font-bold text-[#c586c0]">Awaited Component</div>
 </template>

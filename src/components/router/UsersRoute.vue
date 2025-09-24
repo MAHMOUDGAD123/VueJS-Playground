@@ -14,7 +14,7 @@
   async mounted() {
    const { data, err, ok } = await lazyFetch({
     url: `https://jsonplaceholder.typicode.com/users`,
-    randomDelay: true,
+    ms: 100,
    });
 
    if (ok) {

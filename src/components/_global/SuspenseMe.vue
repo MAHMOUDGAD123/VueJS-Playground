@@ -45,6 +45,7 @@
   // Prevent any unsuspensible async components from throw an error after mark as resolved.
   // So, any unsuspensible async component has to handle the error itself.
   if (!resolved) error.value = err;
+  console.error(err);
   return false;
  });
 </script>

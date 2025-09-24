@@ -13,7 +13,7 @@
  onMounted(async () => {
   const { data, err, ok } = await lazyFetch({
    url: `https://jsonplaceholder.typicode.com/posts/${params.postid}`,
-   randomDelay: true,
+   ms: 100,
   });
 
   if (ok) {

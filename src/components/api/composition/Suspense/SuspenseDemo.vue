@@ -1,7 +1,7 @@
 <script setup lang="ts">
  import { defineAsyncComponent } from 'vue';
  import { rand, waitFor } from '@/assets/tools/helpers';
- import SuspenseMe from '@/components/api/composition/Suspense/SuspenseMe.vue';
+ import SuspenseMe from '@/components/_global/SuspenseMe.vue';
  import AwatiedComponent from '@/components/api/composition/Suspense/AwaitedComponent.vue';
  import CustomFieldset from '@/components/_global/CustomFieldset.vue';
  import AppError from '@/components/_global/AppError.vue';
