@@ -1,6 +1,7 @@
 <script setup lang="ts">
- import { defineAsyncComponent, onBeforeMount } from 'vue';
+ import { onBeforeMount } from 'vue';
  import CustomDetails from '@/components/_global/CustomDetails.vue';
+ import { lazyComponent } from '@/assets/tools/lazy-component';
 
  defineOptions({
   name: 'OptionAPIContent',
@@ -24,63 +25,55 @@
  const components: CompType[] = [
   {
    summary: 'Test Area',
-   comp: defineAsyncComponent(() => import('@/components/api/options/Test/TestOpt.vue')),
+   comp: lazyComponent(() => import('@/components/api/options/Test/TestOpt.vue')),
   },
   {
    summary: 'CounterOpt',
-   comp: defineAsyncComponent(() => import('@/components/api/options/Counter/CounterOpt.vue')),
+   comp: lazyComponent(() => import('@/components/api/options/Counter/CounterOpt.vue')),
   },
   {
    summary: 'LifeCycleOpt',
-   comp: defineAsyncComponent(() => import('@/components/api/options/LifeCycleOpt.vue')),
+   comp: lazyComponent(() => import('@/components/api/options/LifeCycleOpt.vue')),
   },
   {
    summary: 'SayHiOpt',
-   comp: defineAsyncComponent(() => import('@/components/api/options/SayHiEmit/SayHiOpt.vue')),
+   comp: lazyComponent(() => import('@/components/api/options/SayHiEmit/SayHiOpt.vue')),
   },
   {
    summary: 'SlottedFormOpt',
-   comp: defineAsyncComponent(
-    () => import('@/components/api/options/SlottedForm/SlottedFormOpt.vue'),
-   ),
+   comp: lazyComponent(() => import('@/components/api/options/SlottedForm/SlottedFormOpt.vue')),
   },
   {
    summary: 'MouseTrackerOpt',
-   comp: defineAsyncComponent(
-    () => import('@/components/api/options/MouseTracker/MouseTrackerOpt.vue'),
-   ),
+   comp: lazyComponent(() => import('@/components/api/options/MouseTracker/MouseTrackerOpt.vue')),
   },
   {
    summary: 'KeepAliveCompOpt',
-   comp: defineAsyncComponent(
-    () => import('@/components/api/options/KeepAliveComp/KeepAliveCompOpt.vue'),
-   ),
+   comp: lazyComponent(() => import('@/components/api/options/KeepAliveComp/KeepAliveCompOpt.vue')),
   },
   {
    summary: 'v-model',
-   comp: defineAsyncComponent(() => import('@/components/api/options/VModelOpt.vue')),
+   comp: lazyComponent(() => import('@/components/api/options/VModelOpt.vue')),
   },
   {
    summary: 'Custom Directives',
-   comp: defineAsyncComponent(() => import('@/components/api/options/CustomDirectivesOpt.vue')),
+   comp: lazyComponent(() => import('@/components/api/options/CustomDirectivesOpt.vue')),
   },
   {
    summary: 'Mixins',
-   comp: defineAsyncComponent(() => import('@/components/api/options/MixinsTestOpt.vue')),
+   comp: lazyComponent(() => import('@/components/api/options/MixinsTestOpt.vue')),
   },
   {
    summary: 'Computed',
-   comp: defineAsyncComponent(() => import('@/components/api/options/ComputedOpt.vue')),
+   comp: lazyComponent(() => import('@/components/api/options/ComputedOpt.vue')),
   },
   {
    summary: 'Watchers',
-   comp: defineAsyncComponent(() => import('@/components/api/options/WatcherOpt.vue')),
+   comp: lazyComponent(() => import('@/components/api/options/WatcherOpt.vue')),
   },
   {
    summary: 'Provide/Inject',
-   comp: defineAsyncComponent(
-    () => import('@/components/api/options/ProvideInject/ProvideInjectOpt.vue'),
-   ),
+   comp: lazyComponent(() => import('@/components/api/options/ProvideInject/ProvideInjectOpt.vue')),
   },
  ];
 
