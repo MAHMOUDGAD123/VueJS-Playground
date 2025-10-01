@@ -74,6 +74,7 @@
       padding-bottom: 1px;
       position: relative;
       text-box: trim-both cap alphabetic;
+      user-select: none;
 
       &::before {
         content: '';

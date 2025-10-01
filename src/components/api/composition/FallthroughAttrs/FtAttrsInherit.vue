@@ -1,9 +1,9 @@
 <script lang="ts" setup>
- defineOptions({
-  inheritAttrs: true,
- });
+  defineOptions({
+    inheritAttrs: true,
+  });
 </script>
 
 <template>
- <button>Click</button>
+  <button>Click</button>
 </template>
