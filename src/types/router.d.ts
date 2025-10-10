@@ -516,6 +516,10 @@ declare module 'vue-router' {
       name: CustomRouteName;
       matched: CustomRouteRecord[];
     };
+
+    beforeRouteEnter: CustomNavigationGuardWithThis<undefined>;
+    beforeRouteUpdate: CustomNavigationGuard;
+    beforeRouteLeave: CustomNavigationGuard;
   }
 }
 

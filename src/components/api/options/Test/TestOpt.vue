@@ -1,38 +1,26 @@
 <script lang="ts">
-  import { computed } from 'vue';
+  import { defineComponent, ref, useTemplateRef } from 'vue';
   import TestOptChild from './TestOptChild.vue';
 
-  export default {
+  export default defineComponent({
     components: {
       TestOptChild,
     },
 
-    data: () => ({
-      count: 0,
-    }),
+    setup() {
+      const childRef = useTemplateRef<InstanceType<typeof TestOptChild>>('childRef');
 
-    provide() {
       return {
-        count: computed({
-          get: () => {
-            return this.count;
-          },
-          set: (newVal: number) => {
-            this.count = newVal;
-          },
-        }),
+        count: ref(0),
+        childRef,
       };
     },
-  };
+  });
 </script>
 
 <template>
-  <div class="flex flex-col gap-5 p-5">
-    <div class="custom-output">{{ count }}</div>
-    <button class="custom-button" @click="++count">
-      <i class="fa-solid fa-person text-3xl"></i>
-    </button>
-
-    <TestOptChild />
+  <div class="flex flex-col gap-5 p-5 *:flex-1">
+    <div class="custom-output">+{{ childRef?.increasedBy }}</div>
+    <TestOptChild :count @increase="(incBy) => (count = count + incBy)" ref="childRef" />
   </div>
 </template>

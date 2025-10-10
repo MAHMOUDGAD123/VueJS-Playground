@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { CustomFieldset, AppRoute } from '@/components';
+  import AppRoute from '@/components/_global/AppRoute.vue';
+  import CustomFieldset from '@/components/_global/CustomFieldset.vue';
 </script>
 
 <template>

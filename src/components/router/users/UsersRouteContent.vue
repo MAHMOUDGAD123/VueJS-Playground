@@ -2,7 +2,7 @@
   import AppRoute from '@/components/_global/AppRoute.vue';
   import { lazyFetch } from '@/assets/tools/lazy-fetch';
   import { isPROD } from '@/assets/tools/globals';
-  import LoadingSkeleton from '../_global/LoadingSkeleton.vue';
+  import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
 
   type Data = {
     users: UserData[] | null;
@@ -58,5 +58,3 @@
 
   <RouterView />
 </template>
-
-<style scoped></style>

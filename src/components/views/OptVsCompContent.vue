@@ -2,8 +2,11 @@
   import { computed, ref, watch } from 'vue';
   import { _Storage } from '@/assets/tools/storage';
   import { useStorage } from '@/hooks/useStorage';
-  import { CompositionAPIContent, APIModeSwitch, OptionsAPIContent } from '@/components';
+
+  import CompositionAPIContent from '@/components/api/CompositionAPIContent.vue';
   import CustomRadioList from '@/components/_global/CustomRadioList.vue';
+  import OptionsAPIContent from '@/components/api/OptionsAPIContent.vue';
+  import APIModeSwitch from '@/components/_global/APIModeSwitch.vue';
 
   const detailsName = 'example';
   const apiChildCount = ref(0); // API Mode children count

@@ -1,5 +1,15 @@
 import type { RouteRecordRaw } from 'vue-router';
 import NotFoundView from '@/views/NotFoundView.vue';
+import OptVsCompView from '@/views/OptVsCompView.vue';
+import VueRouterView from '@/views/VueRouterView.vue';
+import PostRoute from '@/components/router/post/PostRoute.vue';
+import PostsRoute from '@/components/router/posts/PostsRoute.vue';
+import UserRoute from '@/components/router/user/UserRoute.vue';
+import UsersRoute from '@/components/router/users/UsersRoute.vue';
+import EventBusView from '@/views/EventBusView.vue';
+import TodoApp from '@/views/TodoAppView.vue';
+import ComposableView from '@/views/ComposableView.vue';
+import ScrollOptimizerView from '@/views/ScrollOptimizerView.vue';
 
 export const routes: readonly RouteRecordRaw[] = [
   {
@@ -16,7 +26,7 @@ export const routes: readonly RouteRecordRaw[] = [
   {
     path: '/opt-vs-comp',
     name: 'optVsComp',
-    component: () => import('@/views/OptVsCompView.vue'),
+    component: OptVsCompView,
     meta: {
       title: {
         default: 'Options Vs Composition',
@@ -27,7 +37,7 @@ export const routes: readonly RouteRecordRaw[] = [
   {
     path: '/vue-router',
     name: 'vueRouter',
-    component: () => import('@/views/VueRouterView.vue'),
+    component: VueRouterView,
     meta: {
       title: {
         default: 'Vue Router',
@@ -38,7 +48,7 @@ export const routes: readonly RouteRecordRaw[] = [
       {
         name: 'users',
         path: 'users',
-        component: () => import('@/components/router/UsersRoute.vue'),
+        component: UsersRoute,
         meta: {
           title: {
             default: 'Users',
@@ -48,7 +58,7 @@ export const routes: readonly RouteRecordRaw[] = [
           {
             name: 'user',
             path: ':userid',
-            component: () => import('@/components/router/UserRoute.vue'),
+            component: UserRoute,
             meta: {
               title: {
                 default: 'User',
@@ -63,7 +73,7 @@ export const routes: readonly RouteRecordRaw[] = [
       {
         name: 'posts',
         path: 'posts',
-        component: () => import('@/components/router/PostsRoute.vue'),
+        component: PostsRoute,
         meta: {
           title: {
             default: 'Posts',
@@ -73,7 +83,7 @@ export const routes: readonly RouteRecordRaw[] = [
           {
             name: 'post',
             path: ':postid',
-            component: () => import('@/components/router/PostRoute.vue'),
+            component: PostRoute,
             meta: {
               title: {
                 default: 'Post',
@@ -90,7 +100,7 @@ export const routes: readonly RouteRecordRaw[] = [
   {
     path: '/event-bus',
     name: 'eventBus',
-    component: () => import('@/views/EventBusView.vue'),
+    component: EventBusView,
     meta: {
       isNav: true,
       title: {
@@ -101,7 +111,7 @@ export const routes: readonly RouteRecordRaw[] = [
   {
     path: '/todo-app',
     name: 'todoApp',
-    component: () => import('@/views/TodoApp.vue'),
+    component: TodoApp,
     meta: {
       isNav: true,
       title: {
@@ -112,11 +122,22 @@ export const routes: readonly RouteRecordRaw[] = [
   {
     path: '/composable',
     name: 'composable',
-    component: () => import('@/views/ComposableView.vue'),
+    component: ComposableView,
     meta: {
       isNav: true,
       title: {
         default: 'Composable',
+      },
+    },
+  },
+  {
+    path: '/scroll-optim',
+    name: 'scrollOptim',
+    component: ScrollOptimizerView,
+    meta: {
+      isNav: true,
+      title: {
+        default: 'Scroll Optimizer',
       },
     },
   },

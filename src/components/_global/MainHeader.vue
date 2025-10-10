@@ -1,10 +1,6 @@
 <script setup lang="ts">
   import { RouterLink } from 'vue-router';
   import logoSVG from '@/assets/imgs/logo.svg';
-
-  defineOptions({
-    name: 'MainHeader',
-  });
 </script>
 
 <template>

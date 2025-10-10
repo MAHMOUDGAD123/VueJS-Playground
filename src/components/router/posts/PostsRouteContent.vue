@@ -3,7 +3,7 @@
   import { lazyFetch } from '@/assets/tools/lazy-fetch';
   import AppRoute from '@/components/_global/AppRoute.vue';
   import { isPROD } from '@/assets/tools/globals';
-  import LoadingSkeleton from '../_global/LoadingSkeleton.vue';
+  import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
 
   const posts = ref<PostData[] | null>(null);
   const error = ref<Error | null>(null);

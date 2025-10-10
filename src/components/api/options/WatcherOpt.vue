@@ -19,9 +19,9 @@
 
       fetch: {
         userid: 1,
-        loading: true,
+        loading: false,
         error: null as Error | null,
-        userData: undefined as UserData | undefined,
+        userData: null as UserData | null,
         unwatchCB: undefined as (() => void) | undefined,
       },
     }),
@@ -40,10 +40,16 @@
         async (newId, _, cleanup) => {
           const controller = new AbortController();
           this.fetch.loading = true;
+
+          cleanup(() => {
+            controller.abort(new Error('fetch aborted'));
+          });
+
           const url = isPROD
             ? `https://jsonplaceholder.typicode.com/users/${newId}`
             : `http://localhost:3000/api/users/${newId}`;
-          const { data, err, ok } = await lazyFetch(
+
+          const { data, err } = await lazyFetch<UserData>(
             url,
             {},
             {
@@ -51,16 +57,12 @@
             },
           );
 
-          if (ok) {
-            this.fetch.userData = data as UserData;
-          } else {
-            this.fetch.error = err;
-          }
-          this.fetch.loading = false;
+          // do nothing if the id is different
+          if (newId !== this.fetch.userid) return;
 
-          cleanup(() => {
-            controller.abort();
-          });
+          this.fetch.userData = data;
+          this.fetch.error = err;
+          this.fetch.loading = false;
         },
         { immediate: true },
       );
@@ -77,6 +79,36 @@
 
 <template>
   <div class="flex flex-col gap-7 p-5">
+    <CustomFieldset legend="Fetch">
+      <div class="grid w-full gap-5">
+        <section class="flex items-center justify-center gap-5 select-none">
+          <button
+            class="custom-button aspect-square w-10 rounded-full p-0"
+            @click="--fetch.userid"
+            :disabled="fetch.userid <= 1"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <span class="font-saira text-primary w-[50px] text-2xl">{{ fetch.userid }}</span>
+          <button
+            class="custom-button aspect-square w-10 rounded-full p-0"
+            @click="++fetch.userid"
+            :disabled="fetch.userid >= 10"
+          >
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </section>
+
+        <section class="grid h-[300px] items-center justify-center overflow-auto">
+          <AppRoute route-name="optVsComp" :error="fetch.error!" :loading="fetch.loading">
+            <div class="text-primary wrap-anywhere">
+              {{ fetch.userData }}
+            </div>
+          </AppRoute>
+        </section>
+      </div>
+    </CustomFieldset>
+
     <CustomFieldset legend="Color">
       <div class="flex flex-col items-center justify-center gap-9 select-none">
         <p class="text-primary text-2xl font-bold">Pick a color</p>
@@ -102,36 +134,6 @@
             </tr>
           </tbody>
         </table>
-      </div>
-    </CustomFieldset>
-
-    <CustomFieldset legend="Fetch">
-      <div class="grid w-full gap-5">
-        <section class="flex items-center justify-center gap-5">
-          <button
-            class="custom-button aspect-square w-10 rounded-full p-0"
-            @click="--fetch.userid"
-            :disabled="fetch.userid <= 1"
-          >
-            <i class="fa-solid fa-arrow-left"></i>
-          </button>
-          <span class="font-saira text-primary w-[50px] text-2xl">{{ fetch.userid }}</span>
-          <button
-            class="custom-button aspect-square w-10 rounded-full p-0"
-            @click="++fetch.userid"
-            :disabled="fetch.userid >= 10"
-          >
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-        </section>
-
-        <section class="grid h-[300px] items-center justify-center overflow-auto">
-          <AppRoute route-name="optVsComp" :error="fetch.error!" :loading="fetch.loading">
-            <div class="text-primary wrap-anywhere">
-              {{ fetch.userData }}
-            </div>
-          </AppRoute>
-        </section>
       </div>
     </CustomFieldset>
   </div>

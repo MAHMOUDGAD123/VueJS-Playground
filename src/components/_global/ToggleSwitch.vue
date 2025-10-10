@@ -5,7 +5,7 @@
 
   defineProps<{
     state: boolean;
-    toggleName: string;
+    toggleName?: string;
     modes: {
       one: string;
       two: string;

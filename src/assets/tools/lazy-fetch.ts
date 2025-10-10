@@ -27,10 +27,6 @@ export type LazyFetchOptions = {
    */
   cacheTimeout?: number;
   /**
-   * fetch API options
-   */
-  fetchOptions?: RequestInit;
-  /**
    * Use it to log fetching & caching info
    */
   logInfo?: boolean;

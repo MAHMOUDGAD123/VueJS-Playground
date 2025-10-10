@@ -1,15 +1,24 @@
 <script lang="ts" setup>
-  import { useReactiveCounter as counter } from '@/stores/counter';
+  import { reactive, useTemplateRef, watch } from 'vue';
+
+  const count = reactive({ c1: 0, c2: 0 });
+  const c1Ref = useTemplateRef('counter1');
+
+  watch(
+    () => count.c1,
+    () => {
+      console.log('C1:', c1Ref.value?.textContent);
+    },
+    { flush: 'post', immediate: true },
+  );
 </script>
 
 <template>
-  <div class="custom-output">{{ counter.count }}</div>
-  <div class="flex gap-3 *:flex-1">
-    <button class="custom-button" @click="counter.inc">
-      <i class="fa-solid fa-plus text-2xl"></i>
-    </button>
-    <button class="custom-button" @click="counter.dec">
-      <i class="fa-solid fa-minus text-2xl"></i>
-    </button>
-  </div>
+  <router-link :to="{ name: 'composable', path: '/composable' }">link</router-link>
+  <button class="custom-button text-2xl" @click="count.c1++" ref="counter1">
+    {{ count.c1 }}
+  </button>
+  <button class="custom-button text-2xl" @click="count.c2++" ref="counter2">
+    {{ count.c2 }}
+  </button>
 </template>

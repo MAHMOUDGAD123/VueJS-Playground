@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { useStorage } from '@/hooks/useStorage';
   import { ref, useTemplateRef, watch, type Directive } from 'vue';
-  import { TodosList } from '@/components';
   import ScaleInTransition from '@/components/_global/ScaleInTransition.vue';
+  import TodosList from '@/components/todo-app/TodosList.vue';
 
   // Template Elements
   // -----------------------------------------

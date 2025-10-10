@@ -4,7 +4,7 @@
   import { useRoute } from 'vue-router';
   import AppRoute from '@/components/_global/AppRoute.vue';
   import { isPROD } from '@/assets/tools/globals';
-  import LoadingSkeleton from '../_global/LoadingSkeleton.vue';
+  import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
 
   const route = useRoute();
   const params = route.params as { postid: string };

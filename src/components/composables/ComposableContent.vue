@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { CustomDetails } from '@/components';
   import { useStorage } from '@/hooks/useStorage';
   import { lazyComponent } from '@/assets/tools/lazy-component';
+  import CustomDetails from '@/components/_global/CustomDetails.vue';
 
   type ExampleType = {
     summary: string;

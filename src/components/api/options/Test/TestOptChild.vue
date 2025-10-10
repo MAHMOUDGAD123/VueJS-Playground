@@ -1,17 +1,28 @@
 <script lang="ts">
-  export default {
-    inject: {
-      parentCount: {
-        from: 'count',
-      },
+  import { defineComponent, h, ref, type PropType } from 'vue';
+
+  export default defineComponent({
+    emits: {
+      increase: (incBy: number) => Number.isInteger(incBy),
     },
 
-    data: () => ({}) as { parentCount: number },
-  };
-</script>
+    props: {
+      count: { type: Number as PropType<number>, required: true },
+    },
 
-<template>
-  <button class="custom-button" @click="++parentCount">
-    <i class="fa-solid fa-child text-3xl"></i>
-  </button>
-</template>
+    data: () => ({}) as { increasedBy: string },
+
+    setup(props, ctx) {
+      const increasedBy = ref(0);
+
+      const increase = () => {
+        increasedBy.value = (Math.random() * 100 + 1) >>> 0;
+        ctx.emit('increase', increasedBy.value);
+      };
+
+      ctx.expose({ increasedBy });
+
+      return () => h('div', { onClick: increase, class: 'custom-button text-2xl' }, [props.count]);
+    },
+  });
+</script>

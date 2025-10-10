@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { CoolButton, EventBusChild } from '@/components';
+  import CoolButton from '@/components/_global/CoolButton.vue';
+  import EventBusChild from '@/components/event-bus/EventBusChild.vue';
 
   export default {
     name: 'EventBusViw',

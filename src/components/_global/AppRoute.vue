@@ -4,10 +4,6 @@
   import AppLoader from './AppLoader.vue';
   import { onUnmounted, ref, watch } from 'vue';
 
-  defineOptions({
-    name: 'AppRoute',
-  });
-
   defineSlots<{
     default: () => unknown;
     loading: (props: { isLoading?: boolean }) => unknown;
@@ -27,6 +23,7 @@
      * A delay before showing the loader.
      */
     loadingTimeout?: number;
+    logError?: boolean;
   }>();
 
   const shouldLoaderRender = ref(false);
@@ -62,7 +59,7 @@
   >
     <AppLoader />
   </slot>
-  <slot name="error" :error v-if="error && route.name === routeName">
-    <AppError :error />
+  <slot name="error" :error v-if="!loading && error && route.name === routeName">
+    <AppError :error :printError="logError" />
   </slot>
 </template>

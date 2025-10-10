@@ -77,6 +77,12 @@ declare module 'vue-router' {
       staticTitle: 'Composable';
       dynamicTitle: '';
     };
+    scrollOptim: {
+      routePath: ['/scroll-optim'];
+      path: ['scrollOptim'];
+      staticTitle: 'scroll Optimizer';
+      dynamicTitle: '';
+    };
     notFound: {
       routePath: ['/:pathMatch(.*)*'];
       path: ''; // keep this as empty string

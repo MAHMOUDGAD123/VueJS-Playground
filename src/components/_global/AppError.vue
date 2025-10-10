@@ -3,10 +3,13 @@
 
   const props = defineProps<{
     error: Error;
+    printError?: boolean;
   }>();
 
   onMounted(() => {
-    console.error(props.error);
+    if (props.printError) {
+      console.error(props.error);
+    }
   });
 </script>
 
