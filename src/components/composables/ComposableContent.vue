@@ -8,11 +8,7 @@
     comp: object;
   };
 
-  const opened = useStorage({
-    initialValue: 0,
-    storeKey: '__last_open_composable__',
-    storeType: 'localStorage',
-  });
+  const opened = useStorage<number>('__last_open_composable__', 'localStorage', 0);
 
   const examples: ExampleType[] = [
     {

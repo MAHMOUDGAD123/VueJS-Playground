@@ -21,7 +21,7 @@
   const UnSuspensibleComponent = defineAsyncComponent({
     loader: async () => {
       await waitFor(rand({ min: 7000, max: 15000 }));
-      if (rand({ min: 1, max: 10 }) & 1) {
+      if (rand({ min: 1, max: 10 }) === 3) {
         throw 'Component failed to load NoneSubpensibleComponent';
       }
       return import('@/components/api/composition/Suspense/UnSuspensibleComponent.vue');

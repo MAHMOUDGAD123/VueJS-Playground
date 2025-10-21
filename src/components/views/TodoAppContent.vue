@@ -35,23 +35,15 @@
   // -----------------------------------------
   const todo = ref(initiateTodo());
 
-  const todos = useStorage<Todo[]>({
-    storeKey: '__vue_app_todos__',
-    storeType: 'localStorage',
-    initialValue: [],
-  });
+  const todos = useStorage<Todo[]>('__vue_app_todos__', 'localStorage', []);
 
-  const filteredTodos = useStorage<Todo[]>({
-    storeKey: '__vue_app_filter_todos__',
-    storeType: 'sessionStorage',
-    initialValue: todos.value,
-  });
+  const filteredTodos = useStorage<Todo[]>(
+    '__vue_app_filter_todos__',
+    'sessionStorage',
+    todos.value,
+  );
 
-  const filter = useStorage<Category>({
-    storeKey: '__vue_app_filter__',
-    storeType: 'sessionStorage',
-    initialValue: '----',
-  });
+  const filter = useStorage<Category>('__vue_app_filter__', 'sessionStorage', '----');
 
   // Watchers
   // -----------------------------------------

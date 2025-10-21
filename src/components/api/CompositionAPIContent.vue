@@ -28,8 +28,16 @@
       comp: lazyComponent(() => import('@/components/api/composition/Test/TestComp.vue')),
     },
     {
+      summary: 'Stop Watch',
+      comp: lazyComponent(() => import('@/components/api/composition/StopWatchComp.vue')),
+    },
+    {
       summary: 'shallowRef/triggerRef',
       comp: lazyComponent(() => import('@/components/api/composition/ShallowRef.vue')),
+    },
+    {
+      summary: 'defineModel',
+      comp: lazyComponent(() => import('@/components/api/composition/DefineModel.vue')),
     },
     {
       summary: 'defineExpose',
@@ -86,6 +94,8 @@
     v-show="showAll || showIndex === i"
     :open="!showAll && showIndex === i"
   >
-    <component :is="comp" v-if="showAll || showIndex === i" />
+    <KeepAlive :max="3">
+      <component :is="comp" v-if="showAll || showIndex === i" />
+    </KeepAlive>
   </CustomDetails>
 </template>

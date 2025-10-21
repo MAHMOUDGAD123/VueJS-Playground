@@ -1,16 +1,12 @@
 <script setup lang="ts">
   import { onErrorCaptured, ref } from 'vue';
-  import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
   import AppError from '@/components/_global/AppError.vue';
 
   // Setup
-  withDefaults(
-    defineProps<{
-      timeout?: number;
-      suspensible?: boolean;
-    }>(),
-    { timeout: 200, suspensible: false },
-  );
+  const { timeout = 200, suspensible = false } = defineProps<{
+    timeout?: number;
+    suspensible?: boolean;
+  }>();
 
   defineSlots<{
     default?(props: { isPending: boolean; error: Error | null }): unknown;
@@ -39,7 +35,7 @@
   // Life cycle
   onErrorCaptured((err) => {
     error.value = err;
-    console.error(err);
+    // console.error(err);
     return false;
   });
 </script>

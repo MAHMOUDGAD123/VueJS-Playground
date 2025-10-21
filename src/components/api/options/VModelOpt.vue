@@ -23,8 +23,6 @@
       CustomFieldset,
       CustomInputOpt,
     },
-
-    mounted() {},
   };
 </script>
 
@@ -38,7 +36,7 @@
         <CustomInputOpt v-model.capitalize="text" placeholder=".capitalize (text)" />
         <CustomInputOpt v-model.number="text" placeholder=".number (text)" />
         <CustomInputOpt v-model.lazy="text" placeholder=".lazy (text)" />
-        <CustomInputOpt v-model.trim="text" istextarea placeholder=".trim (textarea)" />
+        <CustomInputOpt v-model.trim="text" textarea placeholder=".trim (textarea)" />
       </section>
     </CustomFieldset>
 

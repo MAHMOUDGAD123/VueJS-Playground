@@ -98,6 +98,8 @@
     v-show="showAll || showIndex === i"
     :open="!showAll && showIndex === i"
   >
-    <component :is="comp" v-if="showAll || showIndex === i" />
+    <KeepAlive :max="3">
+      <component :is="comp" v-if="showAll || showIndex === i" />
+    </KeepAlive>
   </CustomDetails>
 </template>

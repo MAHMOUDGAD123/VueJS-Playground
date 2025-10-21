@@ -1,7 +1,7 @@
 export class Logger {
   private defaultTitle: string;
 
-  constructor(defaultTitle: string) {
+  constructor(defaultTitle: string = 'log') {
     this.defaultTitle = defaultTitle;
   }
 

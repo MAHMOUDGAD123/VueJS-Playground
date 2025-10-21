@@ -1,14 +1,12 @@
 <script lang="ts">
   import { isPROD } from '@/assets/tools/globals';
   import { lazyFetch } from '@/assets/tools/lazy-fetch';
-  import AppRoute from '@/components/_global/AppRoute.vue';
   import CustomFieldset from '@/components/_global/CustomFieldset.vue';
 
   export default {
     name: 'WatcherOpt',
     components: {
       CustomFieldset,
-      AppRoute,
     },
 
     data: () => ({

@@ -1,4 +1,4 @@
-import { ref, computed, reactive } from 'vue';
+import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 
 export const useCounterStore = defineStore('counterStore', () => {
@@ -14,14 +14,4 @@ export const useCounterStore = defineStore('counterStore', () => {
   };
 
   return { count, doubleCount, increment, decrement };
-});
-
-export const useReactiveCounter = reactive({
-  count: 0,
-  inc() {
-    ++this.count;
-  },
-  dec() {
-    --this.count;
-  },
 });

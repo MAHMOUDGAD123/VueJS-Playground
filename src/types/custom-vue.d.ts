@@ -1,8 +1,20 @@
 import 'vue';
+import type AppError from '@/components/_global/AppError.vue';
+import type AppLoader from '@/components/_global/AppLoader.vue';
+import type AppRoute from '@/components/_global/AppRoute.vue';
+import type LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
 
 declare module 'vue' {
   interface ComponentCustomOptions {
-    permissions?: string[];
+    customOptions?: Record<string | symbol, unknown>;
+  }
+
+  interface GlobalComponents {
+    AppLoader: typeof AppLoader;
+    AppError: typeof AppError;
+    AppRoute: typeof AppRoute;
+    LoadingSkeleton: typeof LoadingSkeleton;
   }
 }
+
 export {};

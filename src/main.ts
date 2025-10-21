@@ -7,12 +7,22 @@ import { createEventBus } from '@/plugins/event-bus';
 import font from '@/directives/font';
 import App from '@/App.vue';
 import { Logger } from '@/tools/logger';
+import AppError from '@/components/_global/AppError.vue';
+import AppLoader from '@/components/_global/AppLoader.vue';
+import AppRoute from '@/components/_global/AppRoute.vue';
+import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
 
 const app = createApp(App);
 
 app.use(createPinia());
 app.use(router);
 app.use(createEventBus());
+
+// Global Components
+app.component('AppError', AppError);
+app.component('AppLoader', AppLoader);
+app.component('AppRoute', AppRoute);
+app.component('LoadingSkeleton', LoadingSkeleton);
 
 // Global Custom Directives
 app.directive('font', font);

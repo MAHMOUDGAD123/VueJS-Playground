@@ -1,13 +1,45 @@
 <script setup lang="ts">
+  type EventModifiers = 'trim' | 'number' | 'lazy' | 'capitalize' | 'uppercase' | 'lowercase';
+
   const props = defineProps<{
     label?: string;
     labelWidthInCh?: number | string;
     id?: string;
     name?: string;
     defaultPlaceholder?: string;
+    textarea?: boolean;
   }>();
 
-  const model = defineModel({ default: '' });
+  const [modelValue, modelModifiers] = defineModel<string | number, EventModifiers>();
+  const eventName = modelModifiers.lazy ? 'change' : 'input';
+
+  const updateValue = (e: Event) => {
+    const value = (e.currentTarget as HTMLInputElement).value;
+
+    return Object.keys(modelModifiers).reduce((value, modifier) => {
+      switch (modifier) {
+        case 'trim': {
+          return value.trim();
+        }
+        case 'number': {
+          const parsedValue = parseFloat(value);
+          return Number.isNaN(parsedValue) ? value : parsedValue.toString();
+        }
+        case 'capitalize': {
+          return value.charAt(0).toUpperCase() + value.slice(1);
+        }
+        case 'uppercase': {
+          return value.toUpperCase();
+        }
+        case 'lowercase': {
+          return value.toLowerCase();
+        }
+        default: {
+          return value;
+        }
+      }
+    }, value);
+  };
 </script>
 
 <template>
@@ -22,22 +54,42 @@
       {{ props.label }}
     </div>
 
-    <input
-      type="text"
-      .name="props.name"
-      .id="props.name"
-      v-model="model"
+    <component
+      :is="textarea ? 'textarea' : 'input'"
+      :name="props.name"
+      :id="props.id"
       :placeholder="defaultPlaceholder"
-      class="bg-secondary text-primary border-primary75 rounded-se-sm rounded-ee-sm border-3 px-2 py-1.5"
-    />
+      :value="modelValue"
+      @[eventName]="
+        (e: Event) => {
+          $emit('update:modelValue', updateValue(e));
+        }
+      "
+      class="bg-secondary text-primary border-primary75 rounded-se-sm rounded-ee-sm border-3"
+    ></component>
   </label>
 </template>
 
 <style scoped>
-  input {
+  label {
+    --padding: 8px;
+  }
+
+  input,
+  textarea {
     outline: none;
     flex: 1;
     width: 100%;
+    padding-inline: var(--padding);
+  }
+
+  input {
+    padding-block: calc(var(--padding) / 2);
+  }
+
+  textarea {
+    padding-block: var(--padding);
+    height: calc(2lh + (3 * var(--padding)));
   }
 
   label {
@@ -53,18 +105,33 @@
       border-end-start-radius: 4px;
     }
 
-    &:has(:is(input):focus) {
+    &:has(:is(input, textarea):focus) {
       & > .label {
         background-color: var(--color-primary);
       }
 
-      & input {
+      & :is(input, textarea) {
         border-color: var(--color-primary);
       }
     }
 
-    &:not(:has(.label)) input {
+    &:not(:has(.label)) :is(input, textarea) {
       border-radius: 4px;
+    }
+  }
+
+  label:has(textarea) {
+    flex-direction: column;
+
+    & > .label {
+      border-end-start-radius: 0;
+      border-start-end-radius: 4px;
+      width: 100%;
+    }
+
+    textarea {
+      border-start-end-radius: 0;
+      border-end-start-radius: 4px;
     }
   }
 
@@ -79,7 +146,8 @@
       }
     }
 
-    input {
+    input,
+    textarea {
       border-start-end-radius: 0;
       border-end-start-radius: 4px;
     }

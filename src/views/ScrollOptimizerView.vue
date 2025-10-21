@@ -10,11 +10,7 @@
   const items = Array.from({ length: totalCount }).map((_, i) => i + 1);
 
   // toggle
-  const showFast = useStorage<boolean>({
-    storeKey: '__fast_slow_test__',
-    initialValue: false,
-    storeType: 'localStorage',
-  });
+  const showFast = useStorage<boolean>('__fast_slow_test__', 'localStorage', false);
 </script>
 
 <template>

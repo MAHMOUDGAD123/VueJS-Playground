@@ -11,11 +11,7 @@
   const detailsName = 'example';
   const apiChildCount = ref(0); // API Mode children count
 
-  const apiMode = useStorage<boolean>({
-    initialValue: false,
-    storeKey: '__api_mode__',
-    storeType: 'localStorage',
-  });
+  const apiMode = useStorage<boolean>('__api_mode__', 'localStorage', false);
 
   /* API MODE */
   const toggleAPIMode = () => {

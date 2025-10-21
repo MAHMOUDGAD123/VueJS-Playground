@@ -1,7 +1,5 @@
 <script setup lang="ts">
   import { useRoute, type CustomRouteName } from 'vue-router';
-  import AppError from './AppError.vue';
-  import AppLoader from './AppLoader.vue';
   import { onUnmounted, ref, watch } from 'vue';
 
   defineSlots<{

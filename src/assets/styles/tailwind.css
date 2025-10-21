@@ -362,6 +362,7 @@
     font-family: monospace;
     background-color: color(from var(--color-secondary) srgb r g b / 0.5);
     color: var(--color-primary);
+    overflow-wrap: anywhere;
   }
 
   .custom-select-opt {

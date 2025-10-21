@@ -1,3 +1,6 @@
+declare module '*.html';
+declare module '*.css';
+
 type LCHook =
   | 'beforeCreate'
   | 'created'
