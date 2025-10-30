@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import AppRoute from '@/components/_global/AppRoute.vue';
-  import CustomFieldset from '@/components/_global/CustomFieldset.vue';
 </script>
 
 <template>
@@ -32,7 +31,14 @@
         </tr>
         <tr>
           <th>Matches</th>
-          <td>{{ $route.matched.map((match) => match.name).join(' ➜ ') }}</td>
+          <td>
+            {{
+              $route.matched
+                .filter((match) => match.name)
+                .map((match) => match.name)
+                .join(' ➜ ')
+            }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -45,12 +51,14 @@
       <RouterLink class="custom-link" :to="{ name: 'posts' }">posts</RouterLink>
     </nav>
 
-    <CustomFieldset>
+    <div
+      class="border-primary grid w-full items-center justify-stretch gap-5 rounded-md border-5 px-5 py-7"
+    >
       <AppRoute route-name="vueRouter">
         <div class="font-saira text-primary text-center text-2xl">VUE ROUTER</div>
       </AppRoute>
 
       <RouterView />
-    </CustomFieldset>
+    </div>
   </div>
 </template>

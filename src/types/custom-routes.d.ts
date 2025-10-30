@@ -5,94 +5,140 @@ type From1To100 = RangeFromTo<1, 100>;
 
 declare module 'vue-router' {
   /**
-   * Array of routes each route have the next shape:
-   *
-   * ```ts
-   * routeName: {
-   *  routePath: string[];
-   *  path: string[];
-   *  staticTitle: string;
-   *  dynamicTitle: string;
-   * }
-   * ```
+   * Custom Route Info
+   * @info Used with {@link CustomRouteMap}
+   */
+  type CustomRouteInfo<
+    RoutePath extends string[],
+    Path extends string[],
+    StaticTitle extends string = never,
+    DynamicTitle extends string = never,
+    ChildrenNames extends string = never,
+    Params extends Record<string, unknown> = never,
+    Query extends Record<string, unknown> = never,
+    Hash extends `#${string}` = never,
+  > = {
+    routePath: RoutePath;
+    path: Path;
+    staticTitle: StaticTitle;
+    dynamicTitle: DynamicTitle;
+    childrenNames: ChildrenNames;
+    params: Params;
+    query: Query;
+    hash: Hash;
+  };
+
+  /**
+   * A custom route map defined by the you.
    */
   interface CustomRouteMap {
-    home: {
-      routePath: ['/'];
-      path: ['/'];
-      staticTitle: 'Home';
-      dynamicTitle: '';
-    };
-    optVsComp: {
-      routePath: ['/opt-vs-comp'];
-      path: ['/opt-vs-comp'];
-      staticTitle: 'Options Vs Composition';
-      dynamicTitle: '';
-    };
-    vueRouter: {
-      routePath: ['/vue-router'];
-      path: ['/vue-router'];
-      staticTitle: 'Vue Router';
-      dynamicTitle: '';
-    };
-    users: {
-      routePath: ['/vue-router', 'users'];
-      path: ['/vue-router', 'users'];
-      staticTitle: 'Users';
-      dynamicTitle: '';
-    };
-    user: {
-      routePath: ['/vue-router', 'users', ':userid'];
-      path: [`/vue-router`, 'users', `${From1To10}`];
-      staticTitle: 'User';
-      dynamicTitle: 'User <[userid]>';
-    };
-    posts: {
-      routePath: ['/vue-router', 'posts'];
-      path: ['/vue-router', 'posts'];
-      staticTitle: 'Posts';
-      dynamicTitle: '';
-    };
-    post: {
-      routePath: ['/vue-router', 'posts', ':postid'];
-      path: [`/vue-router`, 'posts', `${From1To100}`];
-      staticTitle: 'Post';
-      dynamicTitle: 'Post <[postid]>';
-    };
-    eventBus: {
-      routePath: ['/event-bus'];
-      path: ['/event-bus'];
-      staticTitle: 'Event Bus';
-      dynamicTitle: '';
-    };
-    todoApp: {
-      routePath: ['/todo-app'];
-      path: ['/todo-app'];
-      staticTitle: 'Todo App';
-      dynamicTitle: '';
-    };
-    composable: {
-      routePath: ['/composable'];
-      path: ['/composable'];
-      staticTitle: 'Composable';
-      dynamicTitle: '';
-    };
-    scrollOptim: {
-      routePath: ['/scroll-optim'];
-      path: ['scrollOptim'];
-      staticTitle: 'scroll Optimizer';
-      dynamicTitle: '';
-    };
-    notFound: {
-      routePath: ['/:pathMatch(.*)*'];
-      path: ''; // keep this as empty string
-      staticTitle: '404';
-      dynamicTitle: '';
-    };
-  }
+    home: CustomRouteInfo<['/'], ['/'], 'Home'>;
 
-  // Custom route meta
-  interface RouteMeta {
-    isNav?: boolean;
+    optVsComp: CustomRouteInfo<['/opt-vs-comp'], ['/opt-vs-comp'], 'Options Vs Composition'>;
+
+    vueRouter: CustomRouteInfo<
+      ['/vue-router'],
+      ['/vue-router'],
+      'Vue Router',
+      never,
+      'users' | 'posts'
+    >;
+
+    users: CustomRouteInfo<
+      ['/vue-router', 'users'],
+      ['/vue-router', 'users'],
+      'Users',
+      never,
+      'user',
+      never,
+      never,
+      `#${From1To10}`
+    >;
+
+    user: CustomRouteInfo<
+      ['/vue-router', 'users', ':userid((?:[1-9]|10\\))'],
+      ['/vue-router', 'users', `${From1To10}`],
+      'User',
+      'User #<[userid]>',
+      'userPost',
+      {
+        userid: `${From1To10}` | From1To10;
+      },
+      {
+        userid: `${From1To10}` | From1To10;
+      }
+    >;
+
+    userPost: CustomRouteInfo<
+      ['/vue-router', 'users', ':userid((?:[1-9]|10\\))', 'posts', ':postid((?:[1-9]|10\\))'],
+      ['/vue-router', 'users', `${From1To10}`, 'posts', `${From1To10}`],
+      'User Post',
+      'User #<[userid]> -- Post #<[postid]>',
+      never,
+      {
+        userid: `${From1To10}` | From1To10;
+        postid: `${From1To10}` | From1To10;
+      },
+      {
+        userid: `${From1To10}` | From1To10;
+        postid: `${From1To10}` | From1To10;
+      }
+    >;
+
+    posts: CustomRouteInfo<
+      ['/vue-router', 'posts'],
+      ['/vue-router', 'posts'],
+      'Posts',
+      never,
+      'post',
+      never,
+      never,
+      `#${From1To100}`
+    >;
+
+    post: CustomRouteInfo<
+      ['/vue-router', 'posts', ':postid((?:[1-9]|[1-9][0-9]|100\\))'],
+      [`/vue-router`, 'posts', `${From1To100}`],
+      'Post',
+      'Post #<[postid]>',
+      never,
+      {
+        postid: `${From1To100}` | From1To100;
+      },
+      {
+        postid: `${From1To100}` | From1To100;
+      }
+    >;
+
+    eventBus: CustomRouteInfo<['/event-bus'], ['/event-bus'], 'Event Bus'>;
+
+    todoApp: CustomRouteInfo<['/todo-app'], ['/todo-app'], 'Todo App'>;
+
+    composable: CustomRouteInfo<['/composable'], ['/composable'], 'Composable'>;
+
+    scrollOptim: CustomRouteInfo<['/scroll-optim'], ['/scroll-optim'], 'scroll Optimizer'>;
+
+    notFound: CustomRouteInfo<
+      ['/:pathMatch(.*)*'],
+      never,
+      '404',
+      never,
+      never,
+      {
+        pathMatch: string[];
+      }
+    >;
+
+    test: CustomRouteInfo<
+      ['/:first?-:last?'],
+      never,
+      'Test',
+      never,
+      never,
+      {
+        first: string | number;
+        last: string | number;
+      }
+    >;
   }
 }

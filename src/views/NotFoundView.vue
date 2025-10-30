@@ -3,7 +3,7 @@
 
   defineOptions({ name: 'NotFoundView' });
 
-  const currentPath = useRoute().path;
+  const currentPath = useRoute<'notFound'>().path;
 </script>
 
 <template>

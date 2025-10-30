@@ -8,7 +8,7 @@ export const useStopWatch = () => {
   const _count = ref('0.0');
   const _paused = ref(true);
   const _stopped = ref(true);
-  const delay = 0; // ms
+  const delay = 100; // ms
 
   // Methods
   const clear = () => {

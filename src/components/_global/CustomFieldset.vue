@@ -10,7 +10,7 @@
 
 <template>
   <fieldset
-    class="border-primary grid w-full items-center justify-stretch gap-7 rounded-md border-5 px-5 py-7"
+    class="border-primary grid w-full items-center justify-stretch gap-5 rounded-md border-5 px-5 py-7"
   >
     <legend v-if="legend" class="bg-primary w-fit rounded-[inherit] px-2.5 py-1.25">
       {{ legend }}

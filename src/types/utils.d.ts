@@ -77,4 +77,11 @@ type Join<T extends string[]> = T extends [
  * ```
  */
 type OnlyWithSlash<U extends string> = U extends `${string}/${string}` ? U : never;
+
+// Helper to match path to route name
+type PathArrayToString<T extends string[] | string> = T extends string
+  ? T
+  : T extends string[]
+    ? JoinPaths<T>
+    : never;
 // ---------------------------------------------------------------------------

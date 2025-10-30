@@ -4,12 +4,14 @@ import OptVsCompView from '@/views/OptVsCompView.vue';
 import VueRouterView from '@/views/VueRouterView.vue';
 import PostRoute from '@/components/router/post/PostRoute.vue';
 import PostsRoute from '@/components/router/posts/PostsRoute.vue';
-import UserRoute from '@/components/router/user/UserRoute.vue';
 import UsersRoute from '@/components/router/users/UsersRoute.vue';
 import EventBusView from '@/views/EventBusView.vue';
 import TodoApp from '@/views/TodoAppView.vue';
 import ComposableView from '@/views/ComposableView.vue';
 import ScrollOptimizerView from '@/views/ScrollOptimizerView.vue';
+import UserPostRoute from '@/components/router/user-post/UserPostRoute.vue';
+import TestView from '@/views/TestView.vue';
+import UserRoute from '@/components/router/user/UserRoute.vue';
 
 export const routes: readonly RouteRecordRaw[] = [
   {
@@ -37,6 +39,7 @@ export const routes: readonly RouteRecordRaw[] = [
   {
     path: '/vue-router',
     name: 'vueRouter',
+    alias: ['/router', '/router-test'],
     component: VueRouterView,
     meta: {
       title: {
@@ -48,6 +51,7 @@ export const routes: readonly RouteRecordRaw[] = [
       {
         name: 'users',
         path: 'users',
+        alias: 'u',
         component: UsersRoute,
         meta: {
           title: {
@@ -56,23 +60,45 @@ export const routes: readonly RouteRecordRaw[] = [
         },
         children: [
           {
+            path: ':userid((?:[1-9]|10\\))',
             name: 'user',
-            path: ':userid',
+            alias: [':userid((?:[1-9]|10\\))/profile'],
             component: UserRoute,
             meta: {
               title: {
                 default: 'User',
                 isDynamic: true,
-                pattern: 'User - <[userid]>',
+                pattern: 'User #<[userid]>',
                 propsMap: [['userid', 'params.userid']],
               },
             },
+            children: [
+              {
+                path: 'posts/:postid((?:[1-9]|10\\))',
+                name: 'userPost',
+                alias: [':postid((?:[1-9]|10\\))'],
+                component: UserPostRoute,
+                props: true, // Pass the params as props to the (UserPostRoute) compoent
+                meta: {
+                  title: {
+                    default: 'User Post',
+                    isDynamic: true,
+                    pattern: 'User #<[userid]> -- Post #<[postid]>',
+                    propsMap: [
+                      ['userid', 'params.userid'],
+                      ['postid', 'params.postid'],
+                    ],
+                  },
+                },
+              },
+            ],
           },
         ],
       },
       {
         name: 'posts',
         path: 'posts',
+        alias: 'p',
         component: PostsRoute,
         meta: {
           title: {
@@ -82,13 +108,13 @@ export const routes: readonly RouteRecordRaw[] = [
         children: [
           {
             name: 'post',
-            path: ':postid',
+            path: ':postid((?:[1-9]|[1-9][0-9]|100\\))',
             component: PostRoute,
             meta: {
               title: {
                 default: 'Post',
                 isDynamic: true,
-                pattern: 'Post - <[postid]>',
+                pattern: 'Post #<[postid]>',
                 propsMap: [['postid', 'params.postid']],
               },
             },
@@ -137,8 +163,19 @@ export const routes: readonly RouteRecordRaw[] = [
     meta: {
       isNav: true,
       title: {
-        default: 'Scroll Optimizer',
+        default: 'scroll Optimizer',
       },
+    },
+  },
+  {
+    path: '/:first?-:last?',
+    name: 'test',
+    component: TestView,
+    meta: {
+      title: {
+        default: 'Test',
+      },
+      isNav: true,
     },
   },
   {
@@ -146,7 +183,6 @@ export const routes: readonly RouteRecordRaw[] = [
     name: 'notFound',
     component: NotFoundView,
     meta: {
-      nickName: 'Not Found',
       title: {
         default: '404',
       },

@@ -1,42 +1,32 @@
-<script lang="ts">
+<script lang="ts" setup>
   import AppRoute from '@/components/_global/AppRoute.vue';
   import { lazyFetch } from '@/assets/tools/lazy-fetch';
   import { isPROD } from '@/assets/tools/globals';
-  import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
+  import type { From1To10 } from '@/types/custom-routes';
+  import { onMounted, ref } from 'vue';
 
-  type Data = {
-    users: UserData[] | null;
-    error: Error | null;
-    loading: boolean;
-  };
+  const users = ref<UserData[] | null>(null);
+  const error = ref<Error | null>(null);
+  const loading = ref<boolean>(true);
 
-  export default {
-    components: { AppRoute, LoadingSkeleton },
+  onMounted(async () => {
+    const url = isPROD
+      ? 'https://jsonplaceholder.typicode.com/users'
+      : 'http://localhost:3000/api/users';
 
-    data: (): Data => ({
-      users: null,
-      error: null,
-      loading: true,
-    }),
+    const { data, err, ok } = await lazyFetch<UserData[]>(url);
 
-    async mounted() {
-      const { data, err, ok } = await lazyFetch<UserData[]>(
-        isPROD ? 'https://jsonplaceholder.typicode.com/users' : 'http://localhost:3000/api/users',
-        {},
-      );
-
-      if (ok) {
-        this.users = data;
-      } else {
-        this.error = err;
-      }
-      this.loading = false;
-    },
-  };
+    if (ok) {
+      users.value = data;
+    } else {
+      error.value = err;
+    }
+    loading.value = false;
+  });
 </script>
 
 <template>
-  <AppRoute route-name="users" :loading :error="error!">
+  <AppRoute route-name="users" :loading :error="error!" :loading-timeout="0">
     <template #loading>
       <LoadingSkeleton>
         <section class="flex flex-wrap justify-center gap-3">
@@ -50,7 +40,7 @@
         class="custom-button"
         v-for="user in users"
         :key="user.id"
-        :to="{ name: 'user', params: { userid: user.id } }"
+        :to="{ name: 'user', params: { userid: user.id as From1To10 } }"
         >{{ user.username.split(/[^a-z]/i)[0] }}
       </RouterLink>
     </div>

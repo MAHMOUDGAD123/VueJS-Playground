@@ -9,6 +9,18 @@ declare module 'vue' {
     customOptions?: Record<string | symbol, unknown>;
   }
 
+  interface ComponentCustomProperties {
+    $customProperties?: Record<string | symbol, unknown>;
+  }
+
+  interface ComponentCustomProps {
+    customProps?: Record<string | symbol, unknown>;
+  }
+
+  interface CSSProperties {
+    '--custom-css-prop'?: 'A' | 'B' | 'C';
+  }
+
   interface GlobalComponents {
     AppLoader: typeof AppLoader;
     AppError: typeof AppError;

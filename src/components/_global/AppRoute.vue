@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useRoute, type CustomRouteName } from 'vue-router';
+  import { useRoute, type RouteMap } from 'vue-router';
   import { onUnmounted, ref, watch } from 'vue';
 
   defineSlots<{
@@ -10,11 +10,11 @@
 
   const {
     routeName,
-    loading,
+    loading = false,
     error,
     loadingTimeout = 200,
   } = defineProps<{
-    routeName: CustomRouteName;
+    routeName: keyof RouteMap;
     loading?: boolean;
     error?: Error;
     /**

@@ -4,6 +4,7 @@
   import AppRoute from '@/components/_global/AppRoute.vue';
   import { isPROD } from '@/assets/tools/globals';
   import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
+  import type { From1To100 } from '@/types/custom-routes';
 
   const posts = ref<PostData[] | null>(null);
   const error = ref<Error | null>(null);
@@ -17,7 +18,7 @@
     : `http://localhost:3000/api/posts`;
 
   onMounted(async () => {
-    const { data, err, ok } = await lazyFetch<PostData[]>(url, {});
+    const { data, err, ok } = await lazyFetch<PostData[]>(url);
 
     if (ok) {
       posts.value = data;
@@ -29,7 +30,7 @@
 </script>
 
 <template>
-  <AppRoute route-name="posts" :loading :error="error!">
+  <AppRoute route-name="posts" :loading :error="error!" :loading-timeout="0">
     <template #loading>
       <LoadingSkeleton>
         <section class="flex flex-wrap justify-center gap-3">
@@ -38,12 +39,12 @@
       </LoadingSkeleton>
     </template>
 
-    <div class="flex flex-wrap justify-center gap-3">
+    <div class="grid-auto-fill-90 grid justify-center gap-3">
       <RouterLink
         class="custom-button"
         v-for="post in posts"
         :key="post.id"
-        :to="{ name: 'post', params: { postid: post.id } }"
+        :to="{ name: 'post', params: { postid: post.id as From1To100 } }"
         >Post {{ numberFormatter.format(post.id) }}</RouterLink
       >
     </div>

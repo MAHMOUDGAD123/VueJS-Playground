@@ -1,12 +1,14 @@
-import { createRouter, createWebHistory, type CustomRouteLocationNormalized } from 'vue-router';
+import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router';
 import { routes } from './routes';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  strict: true, // strict route path match with no trailling slash
 });
 
-const resolveTitle = (route: CustomRouteLocationNormalized) => {
+const resolveTitle = async (route: RouteLocationNormalized) => {
+  if (!route.meta) return;
   if (route.meta.title.isDynamic && route.meta.title.pattern) {
     let titleValue = route.meta.title.pattern as string;
 
