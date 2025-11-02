@@ -550,7 +550,7 @@ declare module 'vue-router' {
     // ------------------------------------
     RouterView: typeof RouterView &
       DefineComponent<{
-        name: RoutePropsKeysFromName<keyof RouteMap>;
+        name?: RoutePropsKeysFromName<keyof RouteMap>;
       }>;
   }
 
