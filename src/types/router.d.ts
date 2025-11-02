@@ -1,12 +1,43 @@
-import type { MaybeRef } from 'vue';
-import 'vue-router';
+import type { Component, DefineComponent, MaybeRef } from 'vue';
+import type {
+  _Awaitable,
+  _RouteRecordBase,
+  LocationQuery,
+  NavigationFailure,
+  NavigationGuardNextCallback,
+  RouteLocation,
+  RouteLocationAsPath,
+  RouteLocationAsPathGeneric,
+  RouteLocationAsPathTypedList,
+  RouteLocationAsRelativeGeneric,
+  RouteLocationAsRelativeTypedList,
+  RouteLocationAsString,
+  RouteLocationNormalized,
+  RouteLocationNormalizedLoaded,
+  RouteMap,
+  RouteMapGeneric,
+  RouteParamsGeneric,
+  RouteParamsRawGeneric,
+  RouterView,
+  UseLinkReturn,
+} from 'vue-router';
 
 declare module 'vue-router' {
+  type Lazy<T> = () => Promise<T>;
+  /**
+   * Allowed Component in {@link RouteLocationMatched}
+   */
+  type RouteComponent = Component | DefineComponent;
+  /**
+   * Allowed Component definitions in route records provided by the user
+   */
+  type RawRouteComponent = RouteComponent | Lazy<RouteComponent>;
+
   /**
    * Holds all possible route record paths
    */
-  type CustomRouteRecordPath =
-    | JoinPaths<CustomRouteMap[keyof CustomRouteMap]['routePath']>
+  type CustomRouteRecordPath<Name extends keyof CustomRouteMap = keyof CustomRouteMap> =
+    | JoinPaths<CustomRouteMap[Name]['routePath']>
     | (string & {});
 
   /**
@@ -20,19 +51,19 @@ declare module 'vue-router' {
   /**
    * Extract params keys by route name
    */
-  type RouteParamsKeysFromName<Name extends keyof RouteMap> = Name extends Name
-    ? RouteMap[Name]['params'] extends never
+  type RouteParamsKeysFromName<Name extends keyof CustomRouteMap> = Name extends Name
+    ? CustomRouteMap[Name]['params'] extends never
       ? never
-      : keyof RouteMap[Name]['params']
+      : keyof CustomRouteMap[Name]['params']
     : never;
 
   /**
    * Extract query keys by route name
    */
-  type RouteQueryKeysFromName<Name extends keyof RouteMap> = Name extends Name
-    ? RouteMap[Name]['query'] extends never
+  type RouteQueryKeysFromName<Name extends keyof CustomRouteMap> = Name extends Name
+    ? CustomRouteMap[Name]['query'] extends never
       ? never
-      : keyof RouteMap[Name]['query']
+      : keyof CustomRouteMap[Name]['query']
     : never;
 
   /**
@@ -42,12 +73,53 @@ declare module 'vue-router' {
     ? RouteParamsKeysFromName<Name> | RouteQueryKeysFromName<Name>
     : never;
 
+  /**
+   * Extract props keys by route name
+   */
+  type RoutePropsKeysFromName<Name extends keyof CustomRouteMap> = Name extends Name
+    ? CustomRouteMap[Name]['props'] extends never
+      ? never
+      : keyof CustomRouteMap[Name]['props']
+    : never;
+
   /** Extract params by route name */
-  type RouteParamsFromName<Name extends keyof CustomRouteMap> = CustomRouteMap[Name]['params'];
+  type RouteParamsFromName<Name extends keyof CustomRouteMap> = Name extends keyof CustomRouteMap
+    ? CustomRouteMap[Name]['params'] extends never
+      ? RouteParamsGeneric
+      : CustomRouteMap[Name]['params']
+    : RouteParamsGeneric;
+
   /** Extract query by route name */
-  type RouteQueryFromName<Name extends keyof CustomRouteMap> = CustomRouteMap[Name]['query'];
+  type RouteQueryFromName<Name extends keyof CustomRouteMap> = Name extends keyof CustomRouteMap
+    ? CustomRouteMap[Name]['query'] extends never
+      ? LocationQuery
+      : CustomRouteMap[Name]['query']
+    : LocationQuery;
+
   /** Extract hash by route name */
-  type RouteHashFromName<Name extends keyof CustomRouteMap> = CustomRouteMap[Name]['hash'];
+  type RouteHashFromName<Name extends keyof CustomRouteMap> = Name extends keyof CustomRouteMap
+    ? CustomRouteMap[Name]['hash'] extends never
+      ? `#${string}`
+      : CustomRouteMap[Name]['hash']
+    : `#${string}`;
+
+  /** Extract props keys by route name*/
+  type RouteRecordPropsFromName<Name extends keyof CustomRouteMap> =
+    Name extends keyof CustomRouteMap
+      ? CustomRouteMap[Name]['props'] extends never
+        ? Record<string, unknown>
+        : CustomRouteMap[Name]['props']
+      : Record<string, unknown>;
+
+  /**
+   * Extract historyState by route name
+   */
+  type RouteHistoryStateFromName<Name extends keyof CustomRouteMap | undefined = undefined> =
+    Name extends keyof CustomRouteMap
+      ? CustomRouteMap[Name]['historyState'] extends never
+        ? HistoryState
+        : CustomRouteMap[Name]['historyState']
+      : HistoryState;
 
   /**
    * Holds all possible route page static title
@@ -62,48 +134,147 @@ declare module 'vue-router' {
     | NonEmpty<CustomRouteMap[Name]['dynamicTitle']>
     | (string & {});
 
-  // Hack the routes types override all (RouteRecordRaw) dependencies
-  // --------------------------------------------------------------
+  // Customized the routes types override all (RouteRecordRaw) dependencies
+  // -----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
+  type _RouteRecordPropsSingleView<Name extends keyof RouteMap = keyof RouteMap> =
+    | boolean
+    | RouteRecordPropsFromName<Name>
+    | ((to: RouteLocationNormalized<Name>) => RouteRecordPropsFromName<Name>);
+
+  type _RouteRecordPropsMultipleViews<Name extends keyof RouteMap = keyof RouteMap> =
+    | boolean
+    | {
+        [K in keyof CustomRouteMap[Name]['props']]:
+          | boolean
+          | CustomRouteMap[Name]['props'][K]
+          | ((to: RouteLocationNormalized<Name>) => CustomRouteMap[Name]['props'][K]);
+      };
+
+  /**
+   * Fix the conflict wirh {@link CustomRouteLocationRaw} (name) by ignore
+   * the {@link Function.name} property.
+   */
+  type _RouteRecordRedirectOption<Name extends keyof RouteMap = keyof RouteMap> =
+    | CustomRouteLocationRaw
+    | (((
+        to: RouteLocation<Name>,
+        from: RouteLocationNormalizedLoaded,
+      ) => CustomRouteLocationRaw) & { name?: never });
+
+  interface __RouteRecordBase<Name extends keyof RouteMap = keyof RouteMap>
+    extends _RouteRecordBase {
+    path: CustomRouteRecordPath<Name>;
+    name?: Name;
+    children?: _RouteRecordRaw[];
+    redirect?: _RouteRecordRedirectOption<Name>;
+    props?: _RouteRecordPropsSingleView<Name> | _RouteRecordPropsMultipleViews<Name>;
+    meta?: RouteMeta<Name>;
+    beforeEnter?:
+      | CustomNavigationGuardWithThis<undefined, Name>
+      | CustomNavigationGuardWithThis<undefined, Name>[];
+  }
+
   interface RouteRecordSingleView {
     path: CustomRouteRecordPath;
-    name?: keyof CustomRouteMap;
+    name?: keyof RouteMap;
+    beforeEnter?: CustomNavigationGuardWithThis | CustomNavigationGuardWithThis[];
   }
+  interface _RouteRecordSingleView<Name extends keyof RouteMap = keyof RouteMap>
+    extends __RouteRecordBase<Name> {
+    /**
+     * Component to display when the URL matches this route.
+     */
+    component: RawRouteComponent;
+    components?: never;
+    children?: never;
+    redirect?: never;
+    props?: _RouteRecordPropsSingleView<Name>;
+  }
+
   interface RouteRecordSingleViewWithChildren {
     path: CustomRouteRecordPath;
-    name?: keyof CustomRouteMap;
+    name?: keyof RouteMap;
+    beforeEnter?: CustomNavigationGuardWithThis | CustomNavigationGuardWithThis[];
   }
+  interface _RouteRecordSingleViewWithChildren<Name extends keyof RouteMap = keyof RouteMap>
+    extends __RouteRecordBase<Name> {
+    /**
+     * Component to display when the URL matches this route.
+     */
+    component?: RawRouteComponent | null | undefined;
+    components?: never;
+    children: _RouteRecordRaw[];
+    props?: _RouteRecordPropsSingleView<Name>;
+  }
+
   interface RouteRecordMultipleViews {
     path: CustomRouteRecordPath;
-    name?: keyof CustomRouteMap;
+    name?: keyof RouteMap;
+    beforeEnter?: CustomNavigationGuardWithThis | CustomNavigationGuardWithThis[];
   }
+  interface _RouteRecordMultipleViews<Name extends keyof RouteMap = keyof RouteMap>
+    extends __RouteRecordBase<Name> {
+    /**
+     * Components to display when the URL matches this route. Allow using named views.
+     */
+    components: Record<RoutePropsKeysFromName<Name>, RawRouteComponent>;
+    component?: never;
+    children?: never;
+    redirect?: never;
+    /**
+     * Allow passing down params as props to the component rendered by
+     * `router-view`. Should be an object with the same keys as `components` or a
+     * boolean to be applied to every component.
+     */
+    props?: _RouteRecordPropsMultipleViews<Name>;
+  }
+
   interface RouteRecordMultipleViewsWithChildren {
     path: CustomRouteRecordPath;
-    name?: keyof CustomRouteMap;
+    name?: keyof RouteMap;
+    beforeEnter?: CustomNavigationGuardWithThis | CustomNavigationGuardWithThis[];
   }
+  interface _RouteRecordMultipleViewsWithChildren<Name extends keyof RouteMap = keyof RouteMap>
+    extends __RouteRecordBase<Name> {
+    /**
+     * Components to display when the URL matches this route. Allow using named views.
+     */
+    components?: Record<RoutePropsKeysFromName<Name>, RawRouteComponent> | null | undefined;
+    component?: never;
+    children: _RouteRecordRaw[];
+    /**
+     * Allow passing down params as props to the component rendered by
+     * `router-view`. Should be an object with the same keys as `components` or a
+     * boolean to be applied to every component.
+     */
+    props?: _RouteRecordPropsMultipleViews<Name>;
+  }
+
   interface RouteRecordRedirect {
     path: CustomRouteRecordPath;
-    name?: keyof CustomRouteMap;
+    name?: keyof RouteMap;
+    beforeEnter?: CustomNavigationGuardWithThis | CustomNavigationGuardWithThis[];
   }
-  // --------------------------------------------------------------
-
-  // Add typed query & title in the system
-  // --------------------------------------------------------------
-  interface RouteRecordInfo<
-    Name extends string | symbol = string,
-    Path extends string = string,
-    ParamsRaw extends RouteParamsRawGeneric = RouteParamsRawGeneric,
-    Params extends RouteParamsGeneric = RouteParamsGeneric,
-    ChildrenNames extends string | symbol = never,
-  > {
-    name: Name;
-    path: Path;
-    paramsRaw: ParamsRaw;
-    params: Params;
-    childrenNames: ChildrenNames;
-    query: RouteQueryFromName<Name>;
-    hash: RouteHashFromName<Name>;
+  interface _RouteRecordRedirect<Name extends keyof RouteMap = keyof RouteMap>
+    extends __RouteRecordBase<Name> {
+    redirect: _RouteRecordRedirectOption<Name>;
+    component?: never;
+    components?: never;
+    props?: never;
   }
 
+  type _RouteRecordRaw<Name extends keyof RouteMap = keyof RouteMap> =
+    | _RouteRecordSingleView<Name>
+    | _RouteRecordSingleViewWithChildren<Name>
+    | _RouteRecordMultipleViews<Name>
+    | _RouteRecordMultipleViewsWithChildren<Name>
+    | _RouteRecordRedirect<Name>;
+  // -----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
+
+  // Add types to system
+  // --------------------------------------------------------------
   type RouteMetaTitleTyped<Name extends keyof CustomRouteMap = keyof CustomRouteMap> = {
     /**
      * You should provide it as default value for the (document.title) if the (isDynamic) if falsy.
@@ -148,6 +319,7 @@ declare module 'vue-router' {
   > {
     query?: RouteQueryFromName<Name>;
     hash?: RouteHashFromName<Name>;
+    state?: RouteHistoryStateFromName<Name>;
   }
 
   interface RouteLocationAsRelativeTyped<
@@ -156,39 +328,47 @@ declare module 'vue-router' {
   > {
     query?: RouteQueryFromName<Name>;
     hash?: RouteHashFromName<Name>;
+    state?: RouteHistoryStateFromName<Name>;
   }
 
   interface RouteLocationNormalizedLoadedTyped<
     RouteMap extends RouteMapGeneric = RouteMapGeneric,
     Name extends keyof RouteMap = keyof RouteMap,
   > {
-    query?: RouteQueryFromName<Name>;
-    hash?: RouteHashFromName<Name>;
-    meta?: RouteMeta<Name>;
+    query: RouteQueryFromName<Name>;
+    hash: RouteHashFromName<Name>;
+    path: RouteNameToPath<Name>;
+    meta: RouteMeta<Name>;
   }
 
   interface RouteLocationNormalizedTyped<
     RouteMap extends RouteMapGeneric = RouteMapGeneric,
     Name extends keyof RouteMap = keyof RouteMap,
   > {
-    query?: RouteQueryFromName<Name>;
-    hash?: RouteHashFromName<Name>;
-    meta?: RouteMeta<Name>;
+    query: RouteQueryFromName<Name>;
+    hash: RouteHashFromName<Name>;
+    path: RouteNameToPath<Name>;
+    meta: RouteMeta<Name>;
   }
 
+  // You don't need to declare override this interface because it depends on (RouteLocationTyped)
   interface RouteLocationResolvedTyped<
     RouteMap extends RouteMapGeneric,
     Name extends keyof RouteMap,
   > {
-    query?: RouteQueryFromName<Name>;
-    hash?: RouteHashFromName<Name>;
-    meta?: RouteMeta<Name>;
+    path: RouteNameToPath<Name>;
+    query: RouteQueryFromName<Name>;
+    hash: RouteHashFromName<Name>;
+    meta: RouteMeta<Name>;
+    state?: RouteHistoryStateFromName<Name>;
   }
 
   interface RouteLocationTyped<RouteMap extends RouteMapGeneric, Name extends keyof RouteMap> {
-    query?: RouteQueryFromName<Name>;
-    hash?: RouteHashFromName<Name>;
-    meta?: RouteMeta<Name>;
+    path: RouteNameToPath<Name>;
+    query: RouteQueryFromName<Name>;
+    hash: RouteHashFromName<Name>;
+    meta: RouteMeta<Name>;
+    state?: RouteHistoryStateFromName<Name>;
   }
   // --------------------------------------------------------------
 
@@ -201,7 +381,7 @@ declare module 'vue-router' {
    * A Cutomized version from {@link RouteLocationRaw} to fix the apperance of the String object
    * methods and properties in the {@link RouteLocationRaw} caused by {@link _LiteralUnion} type.
    */
-  export declare type CustomRouteLocationRaw<Name extends keyof RouteMap = keyof RouteMap> =
+  type CustomRouteLocationRaw<Name extends keyof RouteMap = keyof RouteMap> =
     RouteMapGeneric extends RouteMap
       ? RouteLocationAsString | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric
       :
@@ -221,7 +401,7 @@ declare module 'vue-router' {
   /** A custom {@link NavigationGuardReturn} */
   type CustomNavigationGuardReturn<Name extends keyof RouteMap = keyof RouteMap> =
     | void
-    | Error
+    | (Error & { name: never }) // fix the conflict with (Error.name) and (CustomRouteLocationRaw.name)
     | boolean
     | CustomRouteLocationRaw<Name>;
 
@@ -229,12 +409,22 @@ declare module 'vue-router' {
   interface CustomNavigationGuard<Name extends keyof RouteMap = keyof RouteMap> {
     (
       to: RouteLocationNormalized<Name>,
-      from: RouteLocationNormalizedLoaded<Name>,
-      next: CustomNavigationGuardNext<Name>,
-    ): _Awaitable<CustomNavigationGuardReturn<Name>>;
+      from: RouteLocationNormalizedLoaded,
+      next: CustomNavigationGuardNext,
+    ): _Awaitable<CustomNavigationGuardReturn>;
   }
 
-  /** A custom {@link NavigationGuardWithThis} */
+  interface CustomNavigationHookAfter<Name extends keyof RouteMap = keyof RouteMap> {
+    (
+      to: RouteLocationNormalized<Name>,
+      from: RouteLocationNormalizedLoaded,
+      failure?: NavigationFailure | void,
+    ): unknown;
+  }
+
+  /**
+   *  A custom {@link NavigationGuardWithThis}
+   * */
   interface CustomNavigationGuardWithThis<
     T = undefined,
     Name extends keyof RouteMap = keyof RouteMap,
@@ -242,9 +432,9 @@ declare module 'vue-router' {
     (
       this: T,
       to: RouteLocationNormalized<Name>,
-      from: RouteLocationNormalizedLoaded<Name>,
-      next: CustomNavigationGuardNext<Name>,
-    ): _Awaitable<CustomNavigationGuardReturn<Name>>;
+      from: RouteLocationNormalizedLoaded,
+      next: CustomNavigationGuardNext,
+    ): _Awaitable<CustomNavigationGuardReturn>;
   }
 
   /** A custom {@link UseLinkOptions} */
@@ -261,6 +451,10 @@ declare module 'vue-router' {
   //====================================================================================
   //===================================== END ==========================================
   //====================================================================================
+
+  interface _ErrorListener<Name extends keyof RouteMap = keyof RouteMap> {
+    (error: Error, to: RouteLocationNormalized<Name>, from: RouteLocationNormalizedLoaded): unknown;
+  }
 
   function loadRouteLocation<Name extends keyof RouteMap = keyof RouteMap>(
     route: RouteLocation<Name> | RouteLocationNormalized<Name>,
@@ -299,6 +493,14 @@ declare module 'vue-router' {
     beforeResolve<Name extends keyof RouteMap = keyof RouteMap>(
       guard: CustomNavigationGuardWithThis<undefined, Name>,
     ): () => void;
+
+    afterEach<Name extends keyof RouteMap = keyof RouteMap>(
+      guard: CustomNavigationHookAfter<Name>,
+    ): () => void;
+
+    onError<Name extends keyof RouteMap = keyof RouteMap>(
+      handler: _ErrorListener<Name>,
+    ): () => void;
   }
 
   /**
@@ -307,6 +509,24 @@ declare module 'vue-router' {
    */
   interface RouterLinkProps {
     to: CustomRouteLocationRaw;
+  }
+
+  interface RouteRecordInfo<
+    Name extends string | symbol = string,
+    Path extends string = string,
+    ParamsRaw extends RouteParamsRawGeneric = RouteParamsRawGeneric,
+    Params extends RouteParamsGeneric = RouteParamsGeneric,
+    ChildrenNames extends string | symbol = never,
+  > {
+    name: Name;
+    path: Path;
+    paramsRaw: ParamsRaw;
+    childrenNames: ChildrenNames;
+    params: Params;
+    query: RouteQueryFromName<Name>;
+    props: RouteRecordPropsFromName<Name>;
+    historyState: RouteHistoryStateFromName<Name>;
+    hash: RouteHashFromName<Name>;
   }
 
   // Route Named Map
@@ -328,6 +548,10 @@ declare module 'vue-router' {
     beforeRouteUpdate: CustomNavigationGuard;
     beforeRouteLeave: CustomNavigationGuard;
     // ------------------------------------
+    RouterView: typeof RouterView &
+      DefineComponent<{
+        name: RoutePropsKeysFromName<keyof RouteMap>;
+      }>;
   }
 
   // Custom route meta

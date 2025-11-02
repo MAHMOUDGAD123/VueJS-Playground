@@ -1,6 +1,25 @@
-<script lang="ts" setup>
-  import { rand } from '@/assets/tools/helpers';
+<script lang="ts">
   import CustomFieldset from '@/components/_global/CustomFieldset.vue';
+
+  export default {
+    components: {
+      CustomFieldset,
+    },
+
+    data: () => ({
+      name: 'Mahmoud',
+    }),
+
+    beforeRouteEnter() {
+      console.log('beforeRouteEnter');
+    },
+    beforeRouteUpdate() {
+      console.log('beforeRouteUpdate');
+    },
+    beforeRouteLeave() {
+      console.log('beforeRouteLeave');
+    },
+  };
 </script>
 
 <template>
@@ -27,10 +46,6 @@
           <td>{{ $route.query }}</td>
         </tr>
         <tr>
-          <th>Hash</th>
-          <td>{{ $route.hash || '---' }}</td>
-        </tr>
-        <tr>
           <th>Matches</th>
           <td>
             {{ $route.matched.map((match) => match.name).join(' ➜ ') }}
@@ -39,18 +54,24 @@
       </tbody>
     </table>
 
-    <CustomFieldset class="mt-10">
-      <button
-        class="custom-button"
-        @click="
-          $router.push<'test'>({
-            name: 'test',
-            params: { first: rand({ min: 1, max: 100 }), last: rand({ min: 1, max: 100 }) },
-          })
-        "
+    <nav
+      class="justify-cente my-7 flex list-none flex-wrap items-center justify-center gap-2 rounded-2xl"
+    >
+      <RouterLink class="custom-link" :to="{ name: 'test' }">/</RouterLink>
+      <RouterLink class="custom-link" :to="{ name: 'testChild', params: { first: 1, last: 2 } }"
+        >test</RouterLink
       >
-        Push
-      </button>
-    </CustomFieldset>
+    </nav>
+
+    <AppRoute route-name="test">
+      <CustomFieldset class="mx-auto max-w-2xl">
+        <div class="font-saira text-primary text-center text-2xl">TEST ROUTE</div>
+      </CustomFieldset>
+    </AppRoute>
+
+    <div class="mx-auto flex max-w-2xl flex-col gap-4">
+      <RouterView name="viewOne" />
+      <RouterView name="viewTwo" />
+    </div>
   </div>
 </template>

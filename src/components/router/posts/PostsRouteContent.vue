@@ -13,11 +13,11 @@
     minimumIntegerDigits: 3,
   });
 
-  const url = isPROD
-    ? `https://jsonplaceholder.typicode.com/posts`
-    : `http://localhost:3000/api/posts`;
-
   onMounted(async () => {
+    const url = isPROD
+      ? `https://jsonplaceholder.typicode.com/posts`
+      : `http://localhost:3000/api/posts`;
+
     const { data, err, ok } = await lazyFetch<PostData[]>(url);
 
     if (ok) {

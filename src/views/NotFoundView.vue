@@ -14,7 +14,7 @@
       <span class="text-primary bg-primary10 px-3 py-1">{{ currentPath }}</span>
       route you're looking for doesn't exist.
     </p>
-    <RouterLink to="/" class="custom-button mt-3 flex items-center gap-5">
+    <RouterLink to="/" replace class="custom-button mt-3 flex items-center gap-5">
       <span>Home</span>
       <i class="fa-solid fa-house"></i>
     </RouterLink>

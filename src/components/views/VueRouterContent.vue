@@ -52,7 +52,7 @@
     </nav>
 
     <div
-      class="border-primary grid w-full items-center justify-stretch gap-5 rounded-md border-5 px-5 py-7"
+      class="border-primary mx-auto grid w-full max-w-2xl items-center justify-stretch gap-5 rounded-md border-5 px-5 py-7"
     >
       <AppRoute route-name="vueRouter">
         <div class="font-saira text-primary text-center text-2xl">VUE ROUTER</div>

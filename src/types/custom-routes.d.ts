@@ -1,4 +1,5 @@
 import 'vue-router';
+import type { RouteLocationNormalized } from 'vue-router';
 
 type From1To10 = RangeFromTo<1, 10>;
 type From1To100 = RangeFromTo<1, 100>;
@@ -16,20 +17,82 @@ declare module 'vue-router' {
     ChildrenNames extends string = never,
     Params extends Record<string, unknown> = never,
     Query extends Record<string, unknown> = never,
+    Props extends Record<string, unknown> = never,
+    HistoryState extends Record<string, unknown> = never,
     Hash extends `#${string}` = never,
   > = {
+    /**
+     * Route record path
+     * @example '/users/:id'
+     */
     routePath: RoutePath;
+    /**
+     * Route location path
+     * @example '/users/1'
+     */
     path: Path;
+    /**
+     * Route location meta record
+     * Default document.title value if the (dynamicTitle) is undefined
+     * @example 'Users'
+     */
     staticTitle: StaticTitle;
+    /**
+     * Route location meta record
+     * Dynamic title string defined by you
+     * @example 'User <[userid]>'
+     */
     dynamicTitle: DynamicTitle;
+    /**
+     * Route location children routes names
+     */
     childrenNames: ChildrenNames;
+    /**
+     * Route location params
+     */
     params: Params;
+    /**
+     * Route location query
+     */
     query: Query;
+    /**
+     * Route record props
+     * - CASE (1): When used with single view Route records must be in the next form:
+     * @example
+     * ```ts
+     * type Props = {
+     *  Prop1: string | number;
+     *  Prop2: string | number;
+     * }
+     * ```
+     * - CASE (2): When  used with multi view Route records must be in the next form:
+     * @example
+     * ```ts
+     * type ComponentsProps = {
+     *  viewOne: {
+     *    prop1: string;
+     *    prop2: string;
+     *  },
+     *  viewTwo: {
+     *    prop1: string;
+     *    prop2: string;
+     *  }
+     * }
+     * ```
+     */
+    props: Props;
+    /**
+     * Route location state
+     */
+    historyState: HistoryState;
+    /**
+     * Route location hash
+     */
     hash: Hash;
   };
 
   /**
-   * A custom route map defined by the you.
+   * A custom route map defined by you.
    */
   interface CustomRouteMap {
     home: CustomRouteInfo<['/'], ['/'], 'Home'>;
@@ -50,6 +113,8 @@ declare module 'vue-router' {
       'Users',
       never,
       'user',
+      never,
+      never,
       never,
       never,
       `#${From1To10}`
@@ -93,6 +158,8 @@ declare module 'vue-router' {
       'post',
       never,
       never,
+      never,
+      never,
       `#${From1To100}`
     >;
 
@@ -129,16 +196,47 @@ declare module 'vue-router' {
       }
     >;
 
-    test: CustomRouteInfo<
-      ['/:first?-:last?'],
+    navigationErr: CustomRouteInfo<
+      ['/nav-error'],
       never,
-      'Test',
+      'Navigation Error',
+      never,
+      never,
+      never,
       never,
       never,
       {
-        first: string | number;
-        last: string | number;
+        error?: Error | null;
+        from?: RouteLocationNormalized | null;
+        to?: RouteLocationNormalized | null;
       }
+    >;
+
+    test: CustomRouteInfo<['/test'], ['/test'], 'Test', never, 'testChild'>;
+
+    testChild: CustomRouteInfo<
+      ['/test', ':first?-:last?'],
+      never,
+      'Test Child',
+      never,
+      never,
+      {
+        first?: string | number;
+        last?: string | number;
+      },
+      never,
+      {
+        viewOne: {
+          prop1?: string | number;
+          prop2?: string | number;
+        };
+        viewTwo: {
+          prop3?: string | number;
+          prop4?: string | number;
+        };
+      },
+      never,
+      never
     >;
   }
 }
