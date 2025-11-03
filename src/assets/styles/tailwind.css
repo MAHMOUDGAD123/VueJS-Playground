@@ -304,7 +304,7 @@
   }
 
   .custom-link {
-    @apply bg-primary25 duration-global relative flex cursor-pointer items-center justify-center rounded-full px-5 py-2 text-[1rem] font-bold contain-content select-none;
+    @apply bg-primary25 duration-global relative flex cursor-pointer items-center justify-center rounded-full px-5 py-2 text-center text-[1rem] font-bold contain-content select-none;
 
     &::before {
       content: '';

@@ -124,15 +124,15 @@ declare module 'vue-router' {
   /**
    * Holds all possible route page static title
    */
-  type RouteStaticTitleFromName<Name extends keyof CustomRouteMap> =
-    | NonEmpty<CustomRouteMap[Name]['staticTitle']>
-    | (string & {});
+  type RouteStaticTitleFromName<Name extends keyof CustomRouteMap> = NonEmpty<
+    CustomRouteMap[Name]['staticTitle']
+  >;
   /**
    * Holds all possible route page dynamic title
    */
-  type RouteDynamicTitleFromName<Name extends keyof CustomRouteMap> =
-    | NonEmpty<CustomRouteMap[Name]['dynamicTitle']>
-    | (string & {});
+  type RouteDynamicTitleFromName<Name extends keyof CustomRouteMap> = NonEmpty<
+    CustomRouteMap[Name]['dynamicTitle']
+  >;
 
   // Customized the routes types override all (RouteRecordRaw) dependencies
   // -----------------------------------------------------------------------
@@ -453,7 +453,11 @@ declare module 'vue-router' {
   //====================================================================================
 
   interface _ErrorListener<Name extends keyof RouteMap = keyof RouteMap> {
-    (error: Error, to: RouteLocationNormalized<Name>, from: RouteLocationNormalizedLoaded): unknown;
+    (
+      error: Error | NavigationFailure,
+      to: RouteLocationNormalized<Name>,
+      from: RouteLocationNormalizedLoaded,
+    ): unknown;
   }
 
   function loadRouteLocation<Name extends keyof RouteMap = keyof RouteMap>(
@@ -481,6 +485,9 @@ declare module 'vue-router' {
     replace<Name extends keyof RouteMap = keyof RouteMap>(
       to: CustomRouteLocationRaw<Name>,
     ): Promise<NavigationFailure | void | undefined>;
+
+    addRoute(parentName: NonNullable<keyof RouteMap>, route: _RouteRecordRaw): () => void;
+    addRoute(route: _RouteRecordRaw): () => void;
 
     removeRoute(name: NonNullable<keyof RouteMap>): void;
 
@@ -543,11 +550,13 @@ declare module 'vue-router' {
   // Customize internal types
   interface TypesConfig {
     RouteNamedMap: RouteNamedMap;
+
     /** Fix the {@link _LiteralUnion} issue */
     beforeRouteEnter: CustomNavigationGuardWithThis;
     beforeRouteUpdate: CustomNavigationGuard;
     beforeRouteLeave: CustomNavigationGuard;
     // ------------------------------------
+
     RouterView: typeof RouterView &
       DefineComponent<{
         name?: RoutePropsKeysFromName<keyof RouteMap>;

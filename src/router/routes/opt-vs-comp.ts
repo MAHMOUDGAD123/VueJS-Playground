@@ -7,7 +7,7 @@ export const optionVsCompositionRouteRecord = {
   component: OptVsCompView,
   meta: {
     title: {
-      default: 'Options Vs Composition',
+      default: 'Opt Vs Comp',
     },
     isNav: true,
   },

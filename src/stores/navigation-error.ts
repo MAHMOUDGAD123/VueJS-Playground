@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import type { RouteLocationNormalized } from 'vue-router';
+import type { NavigationFailure, RouteLocationNormalized } from 'vue-router';
 
 type NavigationErrorState = {
-  error: Error | null;
+  error: Error | NavigationFailure | null;
   from: RouteLocationNormalized | null;
   to: RouteLocationNormalized | null;
 };

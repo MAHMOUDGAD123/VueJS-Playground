@@ -97,7 +97,7 @@ declare module 'vue-router' {
   interface CustomRouteMap {
     home: CustomRouteInfo<['/'], ['/'], 'Home'>;
 
-    optVsComp: CustomRouteInfo<['/opt-vs-comp'], ['/opt-vs-comp'], 'Options Vs Composition'>;
+    optVsComp: CustomRouteInfo<['/opt-vs-comp'], ['/opt-vs-comp'], 'Opt Vs Comp'>;
 
     vueRouter: CustomRouteInfo<
       ['/vue-router'],
@@ -196,6 +196,10 @@ declare module 'vue-router' {
       }
     >;
 
+    error: CustomRouteInfo<['/error'], never, 'Error'>;
+
+    routerError: CustomRouteInfo<['/router-error'], never, 'Router Error'>;
+
     navigationErr: CustomRouteInfo<
       ['/nav-error'],
       never,
@@ -206,13 +210,18 @@ declare module 'vue-router' {
       never,
       never,
       {
+        // just for testing
         error?: Error | null;
         from?: RouteLocationNormalized | null;
         to?: RouteLocationNormalized | null;
       }
     >;
 
-    test: CustomRouteInfo<['/test'], ['/test'], 'Test', never, 'testChild'>;
+    test: CustomRouteInfo<['/test'], ['/test'], 'Test', never, 'testChild' | 'newRouteTest'>;
+
+    // dynamic Route Test
+    newRoute: CustomRouteInfo<['/new-route'], never, 'New Route'>;
+    newRouteTest: CustomRouteInfo<['/new-route-test'], never, 'New Route Test'>;
 
     testChild: CustomRouteInfo<
       ['/test', ':first?-:last?'],
@@ -234,9 +243,7 @@ declare module 'vue-router' {
           prop3?: string | number;
           prop4?: string | number;
         };
-      },
-      never,
-      never
+      }
     >;
   }
 }

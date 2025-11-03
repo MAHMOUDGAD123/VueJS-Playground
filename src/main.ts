@@ -11,6 +11,7 @@ import AppError from '@/components/_global/AppError.vue';
 import AppLoader from '@/components/_global/AppLoader.vue';
 import AppRoute from '@/components/_global/AppRoute.vue';
 import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
+import { navigateToErrorPage } from './tools/router-tools';
 
 const app = createApp(App);
 
@@ -31,27 +32,34 @@ app.directive('font', font);
 app.provide('appName', 'VUEJS PLAYGROUND');
 app.provide('developedBy', 'Mahmoud Gad');
 
-if (import.meta.env.DEV) {
-  const logger = new Logger('Vue');
+app.config.errorHandler = (err, instance, info) => {
+  navigateToErrorPage(err as Error);
 
-  app.config.errorHandler = (err, instance, info) => {
+  if (import.meta.env.DEV) {
+    const logger = new Logger('Vue');
     logger.error(`${(err as Error).message}`, 'Error');
     logger.error(`${info}`, 'Info');
     if (instance?.$route) {
       logger.error(instance.$route.fullPath, 'Route');
     }
     logger.line();
-  };
+  }
+};
 
-  app.config.warnHandler = (msg, instance, trace) => {
+app.config.warnHandler = (msg, instance, trace) => {
+  if (import.meta.env.DEV) {
+    const logger = new Logger('Vue');
     logger.warn(`${msg}`, 'Msg');
     logger.warn(`\n\n${trace.split('at').join('-> ')}\n`, 'Trace');
     if (instance?.$route) {
       logger.warn(instance.$route.fullPath, 'Route');
     }
     logger.line();
-  };
-}
+  }
+};
+
+// Wait for router to be ready before mounting
+await router.isReady();
 
 // mount the app
 app.mount('#app');
