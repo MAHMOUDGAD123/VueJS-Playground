@@ -7,6 +7,7 @@ export const todoAppRouteRecord = {
   component: TodoAppView,
   meta: {
     isNav: true,
+    navLinkTitle: 'TodoApp',
     title: {
       default: 'Todo App',
     },

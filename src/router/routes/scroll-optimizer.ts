@@ -7,8 +7,9 @@ export const scrollOptimizerRouteRecord = {
   component: ScrollOptimizerView,
   meta: {
     isNav: true,
+    navLinkTitle: 'ScrollOptim',
     title: {
-      default: 'scroll Optimizer',
+      default: 'Scroll Optimizer',
     },
   },
 } satisfies _RouteRecordRaw<'scrollOptim'>;

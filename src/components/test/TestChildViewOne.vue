@@ -1,17 +1,19 @@
 <script lang="ts" setup>
-  import CustomFieldset from '../_global/CustomFieldset.vue';
+  import CustomFieldset from '@/components/_global/CustomFieldset.vue';
+  import { useStore } from 'vuex';
 
   defineProps<{
     prop1?: string | number;
     prop2?: string | number;
   }>();
+
+  const store = useStore();
 </script>
 
 <template>
-  <CustomFieldset>
-    <div class="flex flex-wrap gap-1 text-center *:flex-1 *:basis-[100px]">
-      <div class="custom-output">{{ prop1 }}</div>
-      <div class="custom-output">{{ prop2 }}</div>
+  <CustomFieldset :icon="{ iconSrc: 'vuex' }">
+    <div class="custom-output text-center">
+      {{ store.state.fname }}
     </div>
   </CustomFieldset>
 </template>

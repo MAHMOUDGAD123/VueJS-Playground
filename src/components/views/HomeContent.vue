@@ -1,14 +1,18 @@
 <script setup lang="ts">
-  import vueLogo from '@/assets/imgs/vue.svg';
-  import { routes } from '@/router';
+  import vueLogo from '@/assets/imgs/vuejs.svg';
   import { RouterLink } from 'vue-router';
+  import TechsCarousel from '@/components/_global/TechsCarousel.vue';
+  import { routes } from '@/router';
 
   const navRoutes = routes.filter((route) => route.meta?.isNav);
 </script>
 
 <template>
-  <div class="mt-20 flex flex-col items-center gap-15">
+  <div class="mt-20 flex flex-col items-center gap-20">
+    <TechsCarousel />
+
     <img :src="vueLogo" alt="Logo" class="w-[200px]" />
+
     <div class="flex flex-col gap-10 text-center">
       <h1 class="text-4xl font-bold">Let's play</h1>
 
@@ -20,7 +24,7 @@
           :to="{ name: route.name }"
           :key="route.name"
           class="custom-button"
-          >{{ route.meta!.title.default }}</RouterLink
+          >{{ route.meta!.navLinkTitle }}</RouterLink
         >
       </div>
     </div>

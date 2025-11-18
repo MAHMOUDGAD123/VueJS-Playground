@@ -1,15 +1,13 @@
 <script setup lang="ts">
-  import { useNavigationErrorStore } from '@/stores/navigation-error';
+  import { useNavigationErrorStore } from '@/stores/composable/navigation-error';
   import { onUnmounted } from 'vue';
-  import { RouterLink, type NavigationFailure } from 'vue-router';
+  import { RouterLink } from 'vue-router';
 
   onUnmounted(() => {
     errorStore.clearNavigationError();
   });
 
   const errorStore = useNavigationErrorStore();
-
-  const failure = errorStore.error as NavigationFailure;
 </script>
 
 <template>
@@ -20,15 +18,17 @@
     </h1>
     <div class="flex flex-wrap items-center justify-center gap-3">
       <span class="text-primary bg-primary10 px-3 py-1">{{
-        failure?.from?.fullPath || '/from'
+        errorStore.state.from?.fullPath || '/from?'
       }}</span>
 
       <i class="fa-solid fa-arrow-right"></i>
 
-      <span class="text-primary bg-primary10 px-3 py-1">{{ failure?.to?.fullPath || '/to' }}</span>
+      <span class="text-primary bg-primary10 px-3 py-1">{{
+        errorStore.state.to?.fullPath || '/to?'
+      }}</span>
     </div>
     <p class="font-bold text-red-400">
-      {{ failure?.message || 'error message' }}
+      {{ errorStore.state.error?.message || 'error message' }}
     </p>
     <RouterLink to="/" replace class="custom-button mt-3 flex items-center gap-5">
       <span>Home</span>

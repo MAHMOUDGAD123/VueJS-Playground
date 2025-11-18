@@ -16,7 +16,7 @@
 
 <template>
   <div class="flex items-center justify-center gap-4 text-xl *:aspect-square *:rounded-full *:p-0">
-    <button class="custom-button w-[40px]" @click="--userId" :disabled="userId <= 1">
+    <button class="custom-button w-10" @click="--userId" :disabled="userId <= 1">
       <i class="fa-solid fa-arrow-left"></i>
     </button>
 
@@ -24,7 +24,7 @@
       {{ userId }}
     </div>
 
-    <button class="custom-button w-[40px]" @click="++userId" :disabled="userId >= 10">
+    <button class="custom-button w-10" @click="++userId" :disabled="userId >= 10">
       <i class="fa-solid fa-arrow-right"></i>
     </button>
   </div>

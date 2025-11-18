@@ -1,8 +1,12 @@
+/* eslint-disable */
+
 type RequireOnly<T, K extends keyof T> = Partial<T> & Required<Pick<T, K>>;
 
 type Prettify<T> = {
   [k in keyof T]: T[k];
 } & {};
+
+type StringWithLiterals<T> = T | (string & {});
 
 /**
  * Ignore empty string from a union type
@@ -85,3 +89,53 @@ type PathArrayToString<T extends string[] | string> = T extends string
     ? JoinPaths<T>
     : never;
 // ---------------------------------------------------------------------------
+
+// A utility type to exclude non-object types (arrays are treated as primitives here for simplicity,
+// as flattening array elements into top-level object properties usually isn't the goal)
+type Primitive = string | number | boolean | symbol | undefined | null;
+
+type DeepFlatten<T> = {
+  [K in keyof T]: T[K] extends Primitive
+    ? { [P in K]: T[K] } // If primitive, keep as is (but in an object for intersection later)
+    : T[K] extends Function // Exclude functions
+      ? { [P in K]: T[K] }
+      : DeepFlattenWithPrefix<T[K], K & string>; // Recurse for objects
+}[keyof T] extends infer U
+  ? (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void
+    ? I
+    : never
+  : never;
+
+// Helper type to prepend the parent key to nested keys
+type DeepFlattenWithPrefix<T, P extends string> = {
+  [K in keyof T]: T[K] extends Primitive
+    ? { [SK in `${P}/${K & string}`]: T[K] }
+    : T[K] extends Function
+      ? { [SK in `${P}/${K & string}`]: T[K] }
+      : DeepFlattenWithPrefix<T[K], `${K & string}`>;
+  // : DeepFlattenWithPrefix<T[K], `${P}/${K & string}`>;
+}[keyof T] extends infer U
+  ? (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void
+    ? I
+    : never
+  : never;
+
+/**
+ * Flattens an object type into a single intersection type containing
+ * all nested properties with their original keys.
+ * Warning: This can cause key collisions where nested properties override top-level ones.
+ */
+type UnstructuredFlatten<T> = T extends Primitive
+  ? T
+  : T extends Function
+    ? T
+    : {
+          // Intersection of all current keys T and recursively flattened nested object types
+          [K in keyof T]: T[K] extends Primitive | Function
+            ? Pick<T, K> // Keep primitive keys as single object type
+            : UnstructuredFlatten<T[K]>; // Recurse for nested objects
+        }[keyof T] extends infer U
+      ? (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void
+        ? I // Uses intersection magic to combine all single-property objects into one
+        : never
+      : never;

@@ -21,6 +21,8 @@
       <slot data="Slot"></slot>
       <div class="custom-output global" :class="cssModules['white-border']">Global</div>
       <div class="custom-output" :class="[$style.module, customClasses.bolderWhite]">Module</div>
+      <div class="custom-output">{{ $myData?.name }}</div>
+      <div class="custom-output">{{ $myData?.age }}</div>
     </div>
   </div>
 </template>

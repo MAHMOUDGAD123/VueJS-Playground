@@ -11,13 +11,16 @@ import AppError from '@/components/_global/AppError.vue';
 import AppLoader from '@/components/_global/AppLoader.vue';
 import AppRoute from '@/components/_global/AppRoute.vue';
 import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
-import { navigateToErrorPage } from './tools/router-tools';
+import { createMyData } from '@/stores/composable/global';
+import { vuexStore } from './stores/vuex';
 
 const app = createApp(App);
 
-app.use(createPinia());
-app.use(router);
-app.use(createEventBus());
+app.use(router); // vue router
+app.use(createPinia()); // pinia
+app.use(vuexStore); // vuex
+app.use(createEventBus()); // event bus
+app.use(createMyData()); // composable global store
 
 // Global Components
 app.component('AppError', AppError);
@@ -33,7 +36,7 @@ app.provide('appName', 'VUEJS PLAYGROUND');
 app.provide('developedBy', 'Mahmoud Gad');
 
 app.config.errorHandler = (err, instance, info) => {
-  navigateToErrorPage(err as Error);
+  // navigateToErrorPage(err as Error, router.currentRoute.value);
 
   if (import.meta.env.DEV) {
     const logger = new Logger('Vue');

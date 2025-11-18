@@ -1,7 +1,8 @@
-import { useNavigationErrorStore } from '@/stores/navigation-error';
+import { useNavigationErrorStore } from '@/stores/composable/navigation-error';
 import { type NavigationFailure, type RouteLocationNormalized } from 'vue-router';
 import { Logger } from './logger';
 import { router } from '@/router';
+import { useErrorStore } from '@/stores/composable/error';
 
 export const resolveTitle = (route: RouteLocationNormalized) => {
   if (!route.meta) return;
@@ -23,13 +24,12 @@ export const resolveTitle = (route: RouteLocationNormalized) => {
   }
 };
 
-export const navigateToErrorPage = (err: Error) => {
-  const errorStore = useNavigationErrorStore();
+export const navigateToErrorPage = (err: Error, route: RouteLocationNormalized) => {
+  const errorStore = useErrorStore();
 
-  errorStore.setNavigationError({
+  errorStore.setError({
     error: err as Error,
-    from: null,
-    to: null,
+    route,
   });
 
   // Navigate to error page
@@ -45,8 +45,8 @@ export const navigateToRouterErrorPage = (
 
   errorStore.setNavigationError({
     error: err as Error,
-    from: from!,
-    to: to!,
+    from: from,
+    to: to,
   });
 
   // Navigate to error page
@@ -60,13 +60,13 @@ export const navigateToRouterErrorPage = (
   }
 };
 
-export const navigateToNavigationErrorPage = (err: NavigationFailure) => {
+export const navigateToNavigationFailurePage = (err: NavigationFailure) => {
   const errorStore = useNavigationErrorStore();
 
   errorStore.setNavigationError({
     error: err as Error,
     from: err.from,
-    to: err.to as RouteLocationNormalized,
+    to: err.to,
   });
 
   // Navigate to Navigation error page

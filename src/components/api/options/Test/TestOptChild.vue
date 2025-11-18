@@ -7,5 +7,8 @@
 </script>
 
 <template>
-  <div class="custom-output">Test</div>
+  <div class="custom-output font-saira">Global Store</div>
+  <div class="custom-output">{{ $myData?.name }}</div>
+  <div class="custom-output">{{ $myData?.age }}</div>
+  <button class="custom-button" @click="$myData.updateData()">Update</button>
 </template>

@@ -1,5 +1,5 @@
 import mitt, { type Emitter } from 'mitt';
-import type { App, Plugin } from 'vue';
+import type { Plugin } from 'vue';
 
 declare module 'vue' {
   interface ComponentCustomProperties {
@@ -21,7 +21,7 @@ export const eventBus: EventBus = mitt<Events>();
  */
 export const createEventBus = (): Plugin => {
   return {
-    install(app: App) {
+    install(app) {
       app.config.globalProperties.$eventBus = eventBus;
     },
   };

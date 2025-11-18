@@ -104,7 +104,7 @@ declare module 'vue-router' {
       ['/vue-router'],
       'Vue Router',
       never,
-      'users' | 'posts'
+      'users' | 'posts' | 'newRouteTest'
     >;
 
     users: CustomRouteInfo<
@@ -177,13 +177,23 @@ declare module 'vue-router' {
       }
     >;
 
+    // dynamic Route Test
+    newRoute: CustomRouteInfo<['/vue-router', 'new-route'], never, 'New Route'>;
+    newRouteTest: CustomRouteInfo<
+      ['/vue-router', 'new-route-test'],
+      ['/vue-router', 'new-route-test'],
+      'New Route Test'
+    >;
+
     eventBus: CustomRouteInfo<['/event-bus'], ['/event-bus'], 'Event Bus'>;
 
     todoApp: CustomRouteInfo<['/todo-app'], ['/todo-app'], 'Todo App'>;
 
     composable: CustomRouteInfo<['/composable'], ['/composable'], 'Composable'>;
 
-    scrollOptim: CustomRouteInfo<['/scroll-optim'], ['/scroll-optim'], 'scroll Optimizer'>;
+    scrollOptim: CustomRouteInfo<['/scroll-optim'], ['/scroll-optim'], 'Scroll Optimizer'>;
+
+    vuex: CustomRouteInfo<['/vuex'], ['/vuex'], 'Vuex'>;
 
     notFound: CustomRouteInfo<
       ['/:pathMatch(.*)*'],
@@ -217,16 +227,12 @@ declare module 'vue-router' {
       }
     >;
 
-    test: CustomRouteInfo<['/test'], ['/test'], 'Test', never, 'testChild' | 'newRouteTest'>;
-
-    // dynamic Route Test
-    newRoute: CustomRouteInfo<['/new-route'], never, 'New Route'>;
-    newRouteTest: CustomRouteInfo<['/new-route-test'], never, 'New Route Test'>;
+    test: CustomRouteInfo<['/test'], ['/test'], 'Test', never, 'testChild'>;
 
     testChild: CustomRouteInfo<
       ['/test', ':first?-:last?'],
       never,
-      'Test Child',
+      'Test Views',
       never,
       never,
       {

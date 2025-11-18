@@ -4,7 +4,7 @@
   import { isPROD } from '@/assets/tools/globals';
   import AppRoute from '@/components/_global/AppRoute.vue';
   import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
-  import type { From1To10, From1To100 } from '@/types/custom-routes';
+  import type { From1To10, From1To100 } from '@/types/routes';
 
   const props = defineProps<{
     userid: From1To10;

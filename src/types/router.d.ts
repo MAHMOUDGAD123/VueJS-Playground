@@ -570,6 +570,10 @@ declare module 'vue-router' {
      */
     isNav?: boolean;
     /**
+     * A title used with RouterLink as text
+     */
+    navLinkTitle?: string;
+    /**
      * The route title (document.title) value.
      */
     title: RouteMetaTitleTyped<Name>;

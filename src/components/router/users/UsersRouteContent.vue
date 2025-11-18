@@ -2,7 +2,7 @@
   import AppRoute from '@/components/_global/AppRoute.vue';
   import { lazyFetch } from '@/assets/tools/lazy-fetch';
   import { isPROD } from '@/assets/tools/globals';
-  import type { From1To10 } from '@/types/custom-routes';
+  import type { From1To10 } from '@/types/routes';
   import { onMounted, ref } from 'vue';
 
   const users = ref<UserData[] | null>(null);

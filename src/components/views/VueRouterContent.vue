@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import AppRoute from '@/components/_global/AppRoute.vue';
+  import CustomFieldset from '../_global/CustomFieldset.vue';
 </script>
 
 <template>
@@ -49,9 +50,11 @@
       <RouterLink class="custom-link" :to="{ name: 'vueRouter' }">/</RouterLink>
       <RouterLink class="custom-link" :to="{ name: 'users' }">users</RouterLink>
       <RouterLink class="custom-link" :to="{ name: 'posts' }">posts</RouterLink>
+      <RouterLink class="custom-link" :to="{ name: 'newRouteTest' }">dynamic</RouterLink>
     </nav>
 
-    <div
+    <CustomFieldset
+      :icon="{ iconSrc: 'vuerouter' }"
       class="border-primary mx-auto grid w-full max-w-2xl items-center justify-stretch gap-5 rounded-md border-5 px-5 py-7"
     >
       <AppRoute route-name="vueRouter">
@@ -59,6 +62,6 @@
       </AppRoute>
 
       <RouterView />
-    </div>
+    </CustomFieldset>
   </div>
 </template>

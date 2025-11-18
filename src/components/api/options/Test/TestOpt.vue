@@ -7,6 +7,12 @@
       TestOptChild,
     },
 
+    inject: {
+      myData: {
+        from: 'myData',
+      },
+    },
+
     data: () => ({}),
   });
 </script>

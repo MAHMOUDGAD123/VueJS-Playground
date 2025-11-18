@@ -1,4 +1,4 @@
-import { useNavigationErrorStore } from '@/stores/navigation-error';
+import { useErrorStore } from '@/stores/composable/error';
 import ErrorView from '@/views/ErrorView.vue';
 import type { _RouteRecordRaw } from 'vue-router';
 
@@ -7,9 +7,9 @@ export const errorRouteRecord = {
   name: 'error',
   component: ErrorView,
   beforeEnter: () => {
-    const errorStore = useNavigationErrorStore();
+    const errorStore = useErrorStore();
     // if the error is null go to Homw view
-    if (!errorStore.error) {
+    if (!errorStore.state.error) {
       return { name: 'home', replace: true };
     }
   },

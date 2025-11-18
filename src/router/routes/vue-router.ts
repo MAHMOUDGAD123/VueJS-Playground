@@ -3,6 +3,7 @@ import PostsRoute from '@/components/router/posts/PostsRoute.vue';
 import UserPostRoute from '@/components/router/user-post/UserPostRoute.vue';
 import UserRoute from '@/components/router/user/UserRoute.vue';
 import UsersRoute from '@/components/router/users/UsersRoute.vue';
+import DynamicRouteTest from '@/components/router/new-route/DynamicRouteTest.vue';
 import VueRouterView from '@/views/VueRouterView.vue';
 import type { _RouteRecordRaw } from 'vue-router';
 
@@ -16,6 +17,7 @@ export const vueRouterRouteRecord = {
       default: 'Vue Router',
     },
     isNav: true,
+    navLinkTitle: 'Router',
   },
   children: [
     {
@@ -91,5 +93,15 @@ export const vueRouterRouteRecord = {
         } satisfies _RouteRecordRaw<'post'>,
       ],
     } satisfies _RouteRecordRaw<'posts'>,
+    {
+      name: 'newRouteTest',
+      path: 'new-route-test',
+      component: DynamicRouteTest,
+      meta: {
+        title: {
+          default: 'New Route Test',
+        },
+      },
+    } satisfies _RouteRecordRaw<'newRouteTest'> as _RouteRecordRaw,
   ],
 } satisfies _RouteRecordRaw<'vueRouter'>;

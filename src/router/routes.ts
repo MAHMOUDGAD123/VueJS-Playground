@@ -6,7 +6,7 @@ import { eventBusRouteRecord } from '@/router/routes/event-bus';
 import { todoAppRouteRecord } from '@/router/routes/todo-app';
 import { composableRouteRecord } from '@/router/routes/composable';
 import { scrollOptimizerRouteRecord } from '@/router/routes/scroll-optimizer';
-import { testRouteRecord } from '@/router/routes/test/test';
+import { testRouteRecord } from '@/router/routes/test';
 import { navigationErrorRouteRecord } from '@/router/routes/navigation-error';
 import { notFoundRouteRecord } from '@/router/routes/not-found';
 import { routerErrorRouteRecord } from './routes/router-error';

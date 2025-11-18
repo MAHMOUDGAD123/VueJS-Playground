@@ -7,6 +7,7 @@ export const composableRouteRecord = {
   component: ComposableView,
   meta: {
     isNav: true,
+    navLinkTitle: 'Composable',
     title: {
       default: 'Composable',
     },

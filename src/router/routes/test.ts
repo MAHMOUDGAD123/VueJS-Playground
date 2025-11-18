@@ -1,4 +1,3 @@
-import NewRouteTest from '@/components/test/NewRouteTest.vue';
 import TestChildViewOne from '@/components/test/TestChildViewOne.vue';
 import TestChildViewTwo from '@/components/test/TestChildViewTwo.vue';
 import TestView from '@/views/TestView.vue';
@@ -13,6 +12,7 @@ export const testRouteRecord = {
       default: 'Test',
     },
     isNav: true,
+    navLinkTitle: 'Test',
   },
   children: [
     {
@@ -34,20 +34,10 @@ export const testRouteRecord = {
       },
       meta: {
         title: {
-          default: 'Test Child',
+          default: 'Test Views',
         },
         isNav: false,
       },
     } satisfies _RouteRecordRaw<'testChild'> as _RouteRecordRaw,
-    {
-      name: 'newRouteTest',
-      path: 'new-route-test',
-      component: NewRouteTest,
-      meta: {
-        title: {
-          default: 'New Route Test',
-        },
-      },
-    } satisfies _RouteRecordRaw<'newRouteTest'> as _RouteRecordRaw,
   ],
 } satisfies _RouteRecordRaw<'test'>;

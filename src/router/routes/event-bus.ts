@@ -7,6 +7,7 @@ export const eventBusRouteRecord = {
   component: EventBusView,
   meta: {
     isNav: true,
+    navLinkTitle: 'EventBus',
     title: {
       default: 'Event Bus',
     },

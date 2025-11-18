@@ -25,7 +25,7 @@
 <template>
   <div>
     <h1
-      class="font-saira text-primary mt-7 mb-9 text-center text-3xl font-bold [text-transform:uppercase] select-none"
+      class="font-saira text-primary mt-7 mb-9 text-center text-3xl font-bold uppercase select-none"
     >
       composable
     </h1>

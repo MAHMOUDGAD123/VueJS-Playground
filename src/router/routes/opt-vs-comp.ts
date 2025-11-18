@@ -10,5 +10,6 @@ export const optionVsCompositionRouteRecord = {
       default: 'Opt Vs Comp',
     },
     isNav: true,
+    navLinkTitle: 'OptVsComp',
   },
 } satisfies _RouteRecordRaw<'optVsComp'>;

@@ -218,8 +218,8 @@
   .custom-button {
     @apply bg-primary25 duration-global relative transform-gpu cursor-pointer content-center rounded-xl px-5 py-2 text-center text-[1rem] font-bold contain-content select-none;
 
-    &:hover,
-    &:focus-visible {
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
       @apply bg-primary60;
     }
 
