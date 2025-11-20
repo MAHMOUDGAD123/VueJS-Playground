@@ -21,13 +21,14 @@ const moduleBBB: ModuleBBB = {
   },
   actions: {
     async actionBBB(ctx, payload) {
-      console.log('actionBBB:', payload ?? ' ✅');
+      console.log('actionBBB', '✅');
       return payload?.valBBB ?? 'BBB';
     },
   },
   mutations: {
     MUTATION_BBB(state, payload) {
-      console.log(state.bbb.replace('Module', 'Mutaion') + (payload?.valBBB ?? ' ✅'));
+      if (payload?.valBBB) state.bbb = payload.valBBB;
+      console.log(state.bbb.replace('Module', 'Mutation'), '✅');
     },
   },
 };
@@ -54,13 +55,14 @@ const moduleBB: ModuleBB = {
   },
   actions: {
     async actionBB(ctx, payload) {
-      console.log('actionBB:', payload ?? ' ✅');
+      console.log('actionBB', '✅');
       return payload?.valBB ?? 'BB';
     },
   },
   mutations: {
     MUTATION_BB(state, payload) {
-      console.log(state.bb.replace('Module', 'Mutaion') + (payload?.valBB ?? ' ✅'));
+      if (payload?.valBB) state.bb = payload.valBB;
+      console.log(state.bb.replace('Module', 'Mutation'), '✅');
     },
   },
   modules: { moduleBBB: moduleBBB },
@@ -88,13 +90,14 @@ const moduleB: ModuleB = {
   },
   actions: {
     async actionB(ctx, payload) {
-      console.log('actionB:', payload ?? ' ✅');
+      console.log('actionB', '✅');
       return payload?.valB ?? 'B';
     },
   },
   mutations: {
     MUTATION_B(state, payload) {
-      console.log(state.b.replace('Module', 'Mutaion') + (payload?.valB ?? ' ✅'));
+      if (payload?.valB) state.b = payload.valB;
+      console.log(state.b.replace('Module', 'Mutation'), '✅');
     },
   },
   modules: { moduleBB },

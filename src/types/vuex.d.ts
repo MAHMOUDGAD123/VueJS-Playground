@@ -131,8 +131,8 @@ declare module 'vuex' {
    * Any types you add here will be reflected at the root `Modules` in the store.
    */
   interface StoreRootModules {
-    moduleA?: ModuleA;
-    moduleB?: ModuleB;
+    moduleA: ModuleA;
+    moduleB: ModuleB;
   }
 
   // Custom Types End
@@ -526,7 +526,7 @@ declare module 'vuex' {
     Action extends keyof ModulesActionsMapResolved[ModuleName] | keyof StoreRootActionsResolved,
   >(
     type: Action,
-    payload:
+    payload?:
       | (Action extends keyof ModulesActionsMapResolved[ModuleName]
           ? ModulesActionsMapResolved[ModuleName][Action]['payload']
           : Action extends keyof StoreRootActionsResolved
@@ -622,24 +622,24 @@ declare module 'vuex' {
       options?: DispatchOptions,
     ): Promise<StoreRootActionsResolved[A]['return']>;
 
-    /**
-     * This overload is not `recommended` to use 💩
-     * @info
-     * Use this overload with the {@link _TypedActionPayload}
-     * @info
-     * You have to provide the second type argument with same type as provided to the {@link _TypedActionPayload} to make TypeScript infer the return type for you.
-     * @example
-     * ```ts
-     * this.$store.dispatch<_TypedActionPayload<'updateAge'>, 'updateAge'>({
-          type: 'updateAge',
-          value: 30,
-        });
-     * ```
-     */
-    <Payload extends _Payload, A extends keyof StoreRootActionsResolved>(
-      payloadWithType: Payload,
-      options?: DispatchOptions,
-    ): Promise<StoreRootActions[A]['return']>;
+    // /**
+    //  * This overload is not `recommended` to use 💩
+    //  * @info
+    //  * Use this overload with the {@link _TypedActionPayload}
+    //  * @info
+    //  * You have to provide the second type argument with same type as provided to the {@link _TypedActionPayload} to make TypeScript infer the return type for you.
+    //  * @example
+    //  * ```ts
+    //  * this.$store.dispatch<_TypedActionPayload<'updateAge'>, 'updateAge'>({
+    //       type: 'updateAge',
+    //       value: 30,
+    //     });
+    //  * ```
+    //  */
+    // <Payload extends _Payload, A extends keyof StoreRootActionsResolved>(
+    //   payloadWithType: Payload,
+    //   options?: DispatchOptions,
+    // ): Promise<StoreRootActions[A]['return']>;
   }
 
   /** Use it to gererate a typed Action. */
@@ -669,19 +669,19 @@ declare module 'vuex' {
       options?: CommitOptions,
     ): void;
 
-    /**
-     * This overload is not `recommended` to use 💩
-     * @info
-     * Only use this overload with the {@link _TypedMutationPayload}
-     * @example
-     * ```ts
-     * this.$store.commit<_TypedMutationPayload<'updateAge'>>({
-          type: 'updateAge',
-          value: 30,
-        });
-     * ```
-     */
-    <Payload extends _Payload>(payloadWithType: Payload, options?: CommitOptions): void;
+    // /**
+    //  * This overload is not `recommended` to use 💩
+    //  * @info
+    //  * Only use this overload with the {@link _TypedMutationPayload}
+    //  * @example
+    //  * ```ts
+    //  * this.$store.commit<_TypedMutationPayload<'updateAge'>>({
+    //       type: 'updateAge',
+    //       value: 30,
+    //     });
+    //  * ```
+    //  */
+    // <Payload extends _Payload>(payloadWithType: Payload, options?: CommitOptions): void;
   }
 
   /** Use it to gererate a typed Mutation. */
@@ -1568,54 +1568,99 @@ declare module 'vuex' {
   // Module Namespace Fix Start (for Mappers)
   // ------------------------------------------------------------------
 
-  type ExtractModulesInfoNamespaceMap<
+  type BuildNamespaceMap<
     Modules,
+    ParentNamespace extends string = '',
     ParentPath extends string = '',
-    ParentName extends string | null = null,
-    ParentMode extends ModuleMode = 'default',
-    CurrentDepth extends number = 0,
+    ParentDepth extends number = 0,
+    HasRootAccess extends boolean = true,
   > = Modules extends undefined
     ? {}
     : Modules extends object
       ? UnionToIntersection<
           {
             [K in keyof Required<Modules>]: Required<Modules>[K] extends _Module<
-              any,
+              infer ModuleName,
               infer Mode,
-              infer State,
-              infer Getters,
-              infer Actions,
-              infer Mutations,
+              any,
+              any,
+              any,
+              any,
               infer Children
             >
-              ? {
-                  // Current module entry
-                  [ModuleName in K]: {
-                    path: ParentPath extends '' ? K & string : `${ParentPath}/${K & string}`;
-                    mode: Mode;
-                    depth: CurrentDepth;
-                    hasChildren: Children extends undefined ? false : true;
-                    parentName: ParentName;
-                    parentPath: ParentPath extends '' ? null : ParentPath;
-                    state: State;
-                    getters: Getters;
-                    actions: Actions;
-                    mutations: Mutations;
-                    children: Children extends undefined ? null : Children;
-                  };
-                } & ExtractModulesInfoNameMap<
-                  Children,
-                  ParentPath extends '' ? K & string : `${ParentPath}/${K & string}`,
-                  K & string,
-                  Mode,
-                  Increment<CurrentDepth>
-                >
+              ? Mode extends 'isolated'
+                ? {
+                    // Create namespace entry for isolated module
+                    [Namespace in `${ParentNamespace}${ParentNamespace extends '' ? '' : '/'}${K & string}`]: {
+                      name: ModuleName;
+                      state: ModulesStateMapResolved[ModuleName];
+                      getters: ModulesGettersMapResolved[ModuleName];
+                      mutations: ModulesMutationsMapResolved[ModuleName];
+                      actions: ModulesActionsMapResolved[ModuleName];
+                      parentNamespace: ParentNamespace extends '' ? null : ParentNamespace;
+                      depth: ParentDepth;
+                      fullPath: `${ParentPath}${ParentPath extends '' ? '' : '/'}${K & string}`;
+                      hasChildren: Children extends undefined
+                        ? false
+                        : HasIsolatedChildren<Children>;
+                      mode: 'isolated';
+                    };
+                  } & BuildNamespaceMap<
+                    Children,
+                    `${ParentNamespace}${ParentNamespace extends '' ? '' : '/'}${K & string}`,
+                    `${ParentPath}${ParentPath extends '' ? '' : '/'}${K & string}`,
+                    Increment<ParentDepth>,
+                    false
+                  >
+                : // Default mode: skip but continue with children
+                  BuildNamespaceMap<
+                    Children,
+                    ParentNamespace,
+                    `${ParentPath}${ParentPath extends '' ? '' : '/'}${K & string}`,
+                    ParentDepth,
+                    HasRootAccess
+                  >
               : {};
           }[keyof Required<Modules>]
         >
       : {};
 
-  type ModulesInfoNamespaceMap = ExtractModulesInfoNamespaceMap<Required<StoreRootModules>>;
+  // Helper to check if module has isolated children
+  type HasIsolatedChildren<Modules> = Modules extends undefined
+    ? false
+    : Modules extends object
+      ? {
+          [K in keyof Required<Modules>]: Required<Modules>[K] extends _Module<
+            any,
+            infer Mode,
+            any,
+            any,
+            any,
+            any,
+            any
+          >
+            ? Mode extends 'isolated'
+              ? true
+              : HasIsolatedChildren<
+                  Required<Modules>[K] extends _Module<any, any, any, any, any, any, infer Children>
+                    ? Children
+                    : undefined
+                >
+            : false;
+        }[keyof Required<Modules>] extends false
+        ? false
+        : true
+      : false;
+
+  /**
+   * Map of all namespaced (isolated) modules with their namespace paths as keys
+   */
+  type ModulesInfoNamespaceMap = BuildNamespaceMap<Required<StoreRootModules>>;
+
+  /**
+   * All valid namespace paths that can be used with mappers
+   */
+  type ValidNamespaces = keyof ModulesInfoNamespaceMap;
 
   // Module Namespace Fix End
   // ------------------------------------------------------------------
@@ -1623,28 +1668,32 @@ declare module 'vuex' {
   // Mappers Fix Start
   // ------------------------------------------------------------------
 
-  // Custom Types
+  // helper Types
+  type Namespaces = ValidNamespaces;
   type _CustomVue = Record<string, any> & ComponentPublicInstance;
   type _Computed<Return> = () => Return;
   type _InlineComputed<T extends Function> = T extends (...args: any[]) => infer R
     ? () => R
     : never;
+  type ActionMethod = (...args: any[]) => Promise<any>;
 
   // State
   // ##################################################################
 
   // Keys
-  type Namespaces = ModuleNames;
-  type StateKeys = keyof StoreRootStateResolved;
+  type RootStateKeys = keyof StoreRootStateResolved;
+  type RootGettersKeys = keyof StoreRootGettersResolved;
+  type RootActionsKeys = keyof StoreRootActionsResolved;
+  type RootMutationsKeys = keyof StoreRootMutationsResolved;
 
-  // State Mappers
+  // [1] State Mappers
   interface _StateMapper {
-    <Key extends StateKeys>(map: Key[]): { [K in Key]: _Computed<StoreRootStateResolved[K]> };
+    <Key extends RootStateKeys>(map: Key[]): { [K in Key]: _Computed<StoreRootStateResolved[K]> };
 
     <
       Map extends Record<
         string,
-        | StateKeys
+        | RootStateKeys
         | ((
             this: _CustomVue,
             state: StoreRootStateResolved,
@@ -1654,44 +1703,403 @@ declare module 'vuex' {
     >(
       map: Map,
     ): {
-      [K in keyof Map]: Map[K] extends StateKeys
+      [K in keyof Map]: Map[K] extends RootStateKeys
         ? _Computed<StoreRootStateResolved[Map[K]]>
         : _InlineComputed<Map[K]>;
     };
   }
 
   interface _StateMapperWithNamespace {
-    <Namespace extends Namespaces, Key extends keyof ModulesStateMapResolved[Namespace]>(
+    <Namespace extends Namespaces, Key extends keyof ModulesInfoNamespaceMap[Namespace]['state']>(
       namespace: Namespace,
       map: Key[],
-    ): { [K in Key]: _Computed<ModulesStateMapResolved[Namespace][K]> };
+    ): { [K in Key]: _Computed<ModulesInfoNamespaceMap[Namespace]['state'][K]> };
 
     <
       Namespace extends Namespaces,
       Map extends Record<
         string,
-        | keyof ModulesStateMapResolved[Namespace]
+        | keyof ModulesInfoNamespaceMap[Namespace]['state']
         | ((
             this: _CustomVue,
-            state: ModulesStateMapResolved[Namespace],
-            getters: ModulesGettersMapResolved[Namespace],
+            state: ModulesInfoNamespaceMap[Namespace]['state'],
+            getters: ModulesInfoNamespaceMap[Namespace]['getters'],
           ) => any)
       >,
     >(
       namespace: Namespace,
       map: Map,
     ): {
-      [K in keyof Map]: Map[K] extends ModulesStateMapResolved[Namespace]
-        ? _Computed<StoreRootStateResolved[Namespace][Map[K]]>
+      [K in keyof Map]: Map[K] extends keyof ModulesInfoNamespaceMap[Namespace]['state']
+        ? _Computed<ModulesInfoNamespaceMap[Namespace]['state'][Map[K]]>
         : _InlineComputed<Map[K]>;
     };
   }
 
+  // [2] Getters Mappers
+  interface _GettersMapper {
+    <Key extends RootGettersKeys>(
+      map: Key[],
+    ): { [K in Key]: _Computed<StoreRootGettersResolved[K]> };
+
+    <Map extends Record<string, RootGettersKeys>>(
+      map: Map,
+    ): {
+      [K in keyof Map]: _Computed<StoreRootGettersResolved[Map[K]]>;
+    };
+  }
+
+  interface _GettersMapperWithNamespace {
+    <Namespace extends Namespaces, Key extends keyof ModulesInfoNamespaceMap[Namespace]['getters']>(
+      namespace: Namespace,
+      map: Key[],
+    ): { [K in Key]: _Computed<ModulesInfoNamespaceMap[Namespace]['getters'][K]> };
+
+    <
+      Namespace extends Namespaces,
+      Map extends Record<string, keyof ModulesInfoNamespaceMap[Namespace]['getters']>,
+    >(
+      namespace: Namespace,
+      map: Map,
+    ): {
+      [K in keyof Map]: _Computed<ModulesInfoNamespaceMap[Namespace]['getters'][Map[K]]>;
+    };
+  }
+
+  // [3] Actions Mappers
+  interface _ActionsMapper {
+    <Key extends RootActionsKeys>(
+      map: Key[],
+    ): {
+      [K in Key]: (
+        payload?: StoreRootActionsResolved[K]['payload'] | null,
+      ) => Promise<StoreRootActionsResolved[K]['return']>;
+    };
+
+    <
+      Map extends Record<
+        string,
+        RootActionsKeys | ((this: _CustomVue, dispatch: _Dispatch, ...args: any[]) => any)
+      >,
+    >(
+      map: Map,
+    ): {
+      [K in keyof Map]: Map[K] extends RootActionsKeys
+        ? (
+            payload?: StoreRootActionsResolved[Map[K]]['payload'] | null,
+          ) => Promise<StoreRootActionsResolved[Map[K]]['return']>
+        : Map[K] extends (this: any, dispatch: any, ...args: infer Args) => infer R
+          ? (...args: Args) => R
+          : never;
+    };
+  }
+
+  interface _ActionsMapperWithNamespace {
+    <Namespace extends Namespaces, Key extends keyof ModulesInfoNamespaceMap[Namespace]['actions']>(
+      namespace: Namespace,
+      map: Key[],
+    ): {
+      [K in Key]: (
+        ...args: ModulesInfoNamespaceMap[Namespace]['actions'][K]['root'] extends true
+          ? [
+              payload: ModulesInfoNamespaceMap[Namespace]['actions'][K]['payload'] | null,
+              options: { root: true },
+            ]
+          : [
+              payload?: ModulesInfoNamespaceMap[Namespace]['actions'][K]['payload'] | null,
+              options?: { root?: false },
+            ]
+      ) => Promise<ModulesInfoNamespaceMap[Namespace]['actions'][K]['return']>;
+    };
+
+    <
+      Namespace extends Namespaces,
+      Map extends Record<
+        string,
+        | keyof ModulesInfoNamespaceMap[Namespace]['actions']
+        | ((
+            this: _CustomVue,
+            dispatch: _ActionContextDispatch<ModulesInfoNamespaceMap[Namespace]['name']>,
+            ...args: any[]
+          ) => any)
+      >,
+    >(
+      namespace: Namespace,
+      map: Map,
+    ): {
+      [K in keyof Map]: Map[K] extends keyof ModulesInfoNamespaceMap[Namespace]['actions']
+        ? (
+            ...args: ModulesInfoNamespaceMap[Namespace]['actions'][Map[K]]['root'] extends true
+              ? [
+                  payload: ModulesInfoNamespaceMap[Namespace]['actions'][Map[K]]['payload'] | null,
+                  options: { root: true },
+                ]
+              : [
+                  payload?: ModulesInfoNamespaceMap[Namespace]['actions'][Map[K]]['payload'] | null,
+                  options?: { root?: false },
+                ]
+          ) => Promise<ModulesInfoNamespaceMap[Namespace]['actions'][Map[K]]['return']>
+        : Map[K] extends (this: any, dispatch: any, ...args: infer Args) => infer R
+          ? (...args: Args) => R
+          : never;
+    };
+  }
+
+  // [4] Mutations Mappers
+  interface _MutationsMapper {
+    <Key extends RootMutationsKeys>(
+      map: Key[],
+    ): {
+      [K in Key]: (payload?: StoreRootMutationsResolved[K] | null) => void;
+    };
+
+    <
+      Map extends Record<
+        string,
+        RootMutationsKeys | ((this: _CustomVue, commit: _Commit, ...args: any[]) => any)
+      >,
+    >(
+      map: Map,
+    ): {
+      [K in keyof Map]: Map[K] extends RootMutationsKeys
+        ? (payload?: StoreRootMutationsResolved[Map[K]] | null) => void
+        : Map[K] extends (this: any, commit: any, ...args: infer Args) => infer R
+          ? (...args: Args) => R
+          : never;
+    };
+  }
+
+  interface _MutationsMapperWithNamespace {
+    <
+      Namespace extends Namespaces,
+      Key extends keyof ModulesInfoNamespaceMap[Namespace]['mutations'],
+    >(
+      namespace: Namespace,
+      map: Key[],
+    ): {
+      [K in Key]: (payload?: ModulesInfoNamespaceMap[Namespace]['mutations'][K] | null) => void;
+    };
+
+    <
+      Namespace extends Namespaces,
+      Map extends Record<
+        string,
+        | keyof ModulesInfoNamespaceMap[Namespace]['mutations']
+        | ((
+            this: _CustomVue,
+            commit: _ActionContextCommit<ModulesInfoNamespaceMap[Namespace]['name']>,
+            ...args: any[]
+          ) => any)
+      >,
+    >(
+      namespace: Namespace,
+      map: Map,
+    ): {
+      [K in keyof Map]: Map[K] extends keyof ModulesInfoNamespaceMap[Namespace]['mutations']
+        ? (payload?: ModulesInfoNamespaceMap[Namespace]['mutations'][Map[K]] | null) => void
+        : Map[K] extends (this: any, commit: any, ...args: infer Args) => infer R
+          ? (...args: Args) => R
+          : never;
+    };
+  }
+
+  // [5] Namespaced Mappers
+  interface _NamespacedMappers<Namespace extends Namespaces> {
+    mapState: _NamespacedStateMapper<Namespace>;
+    mapGetters: _NamespacedGettersMapper<Namespace>;
+    mapActions: _NamespacedActionsMapper<Namespace>;
+    mapMutations: _NamespacedMutationsMapper<Namespace>;
+  }
+
+  interface _NamespacedStateMapper<Namespace extends Namespaces> {
+    <Key extends keyof ModulesInfoNamespaceMap[Namespace]['state']>(
+      map: Key[],
+    ): { [K in Key]: _Computed<ModulesInfoNamespaceMap[Namespace]['state'][K]> };
+
+    <
+      Map extends Record<
+        string,
+        | keyof ModulesInfoNamespaceMap[Namespace]['state']
+        | ((
+            this: _CustomVue,
+            state: ModulesInfoNamespaceMap[Namespace]['state'],
+            getters: ModulesInfoNamespaceMap[Namespace]['getters'],
+          ) => any)
+      >,
+    >(
+      map: Map,
+    ): {
+      [K in keyof Map]: Map[K] extends keyof ModulesInfoNamespaceMap[Namespace]['state']
+        ? _Computed<ModulesInfoNamespaceMap[Namespace]['state'][Map[K]]>
+        : _InlineComputed<Map[K]>;
+    };
+  }
+
+  interface _NamespacedGettersMapper<Namespace extends Namespaces> {
+    <Key extends keyof ModulesInfoNamespaceMap[Namespace]['getters']>(
+      map: Key[],
+    ): { [K in Key]: _Computed<ModulesInfoNamespaceMap[Namespace]['getters'][K]> };
+
+    <Map extends Record<string, keyof ModulesInfoNamespaceMap[Namespace]['getters']>>(
+      map: Map,
+    ): {
+      [K in keyof Map]: _Computed<ModulesInfoNamespaceMap[Namespace]['getters'][Map[K]]>;
+    };
+  }
+
+  interface _NamespacedActionsMapper<Namespace extends Namespaces> {
+    <Key extends keyof ModulesInfoNamespaceMap[Namespace]['actions']>(
+      map: Key[],
+    ): {
+      [K in Key]: (
+        ...args: ModulesInfoNamespaceMap[Namespace]['actions'][K]['root'] extends true
+          ? [
+              payload: ModulesInfoNamespaceMap[Namespace]['actions'][K]['payload'] | null,
+              options: { root: true },
+            ]
+          : [
+              payload?: ModulesInfoNamespaceMap[Namespace]['actions'][K]['payload'] | null,
+              options?: { root?: false },
+            ]
+      ) => Promise<ModulesInfoNamespaceMap[Namespace]['actions'][K]['return']>;
+    };
+
+    <
+      Map extends Record<
+        string,
+        | keyof ModulesInfoNamespaceMap[Namespace]['actions']
+        | ((
+            this: _CustomVue,
+            dispatch: _ActionContextDispatch<ModulesInfoNamespaceMap[Namespace]['name']>,
+            ...args: any[]
+          ) => any)
+      >,
+    >(
+      map: Map,
+    ): {
+      [K in keyof Map]: Map[K] extends keyof ModulesInfoNamespaceMap[Namespace]['actions']
+        ? (
+            ...args: ModulesInfoNamespaceMap[Namespace]['actions'][Map[K]]['root'] extends true
+              ? [
+                  payload: ModulesInfoNamespaceMap[Namespace]['actions'][Map[K]]['payload'] | null,
+                  options: { root: true },
+                ]
+              : [
+                  payload?: ModulesInfoNamespaceMap[Namespace]['actions'][Map[K]]['payload'] | null,
+                  options?: { root?: false },
+                ]
+          ) => Promise<ModulesInfoNamespaceMap[Namespace]['actions'][Map[K]]['return']>
+        : Map[K] extends (this: any, dispatch: any, ...args: infer Args) => infer R
+          ? (...args: Args) => R
+          : never;
+    };
+  }
+
+  interface _NamespacedMutationsMapper<Namespace extends Namespaces> {
+    <Key extends keyof ModulesInfoNamespaceMap[Namespace]['mutations']>(
+      map: Key[],
+    ): {
+      [K in Key]: (payload?: ModulesInfoNamespaceMap[Namespace]['mutations'][K] | null) => void;
+    };
+
+    <
+      Map extends Record<
+        string,
+        | keyof ModulesInfoNamespaceMap[Namespace]['mutations']
+        | ((
+            this: _CustomVue,
+            commit: _ActionContextCommit<ModulesInfoNamespaceMap[Namespace]['name']>,
+            ...args: any[]
+          ) => any)
+      >,
+    >(
+      map: Map,
+    ): {
+      [K in keyof Map]: Map[K] extends keyof ModulesInfoNamespaceMap[Namespace]['mutations']
+        ? (payload?: ModulesInfoNamespaceMap[Namespace]['mutations'][Map[K]] | null) => void
+        : Map[K] extends (this: any, commit: any, ...args: infer Args) => infer R
+          ? (...args: Args) => R
+          : never;
+    };
+  }
+
   declare const mapState: _StateMapper & _StateMapperWithNamespace;
+  declare const mapGetters: _GettersMapper & _GettersMapperWithNamespace;
+  declare const mapActions: _ActionsMapper & _ActionsMapperWithNamespace;
+  declare const mapMutations: _MutationsMapper & _MutationsMapperWithNamespace;
+  declare function createNamespacedHelpers<Namespace extends Namespaces>(
+    namespace: Namespace,
+  ): _NamespacedMappers<Namespace>;
 
   // ##################################################################
 
   // Mappers Fix End
+  // ------------------------------------------------------------------
+
+  // Logger Fix Start
+  // ------------------------------------------------------------------
+
+  interface _Logger extends Partial<Pick<Console, 'groupCollapsed' | 'group' | 'groupEnd'>> {
+    log(message: string, color: string, payload: any): void;
+    log(message: string): void;
+  }
+
+  interface _LoggerOption<S, G> {
+    /**
+     * Filter which mutations to log
+     * @param mutation the mutations payload object
+     * @param stateBefore store state before update
+     * @param stateAfter store state after update
+     */
+    filter?: (mutation: MutationPayloadUnion, stateBefore: S, stateAfter: S) => boolean;
+    /**
+     * Transform state before logging
+     * @param state the store state
+     */
+    transformer?: (state: S) => any;
+    /**
+     * Transform mutation before logging
+     * @param mutation
+     */
+    mutationTransformer?: (mutation: MutationPayloadUnion) => any;
+    /**
+     * Filter which actions to log
+     * @param action action payload object
+     * @param state store state
+     */
+    actionFilter?: (action: ActionPayloadUnion, state: S) => boolean;
+    /**
+     * Transform action before logging
+     * @param action action payload object
+     */
+    actionTransformer?: (action: ActionPayloadUnion) => any;
+    /**
+     * Collapse log groups
+     * @default true
+     */
+    collapsed?: boolean;
+    /**
+     * Log mutations
+     * @default true
+     */
+    logMutations?: boolean;
+    /**
+     * Log actions
+     * @default true
+     */
+    logActions?: boolean;
+    /**
+     * Custom logger (default: console)
+     */
+    logger?: _Logger;
+  }
+
+  declare function createLogger<
+    State extends StoreRootStateResolved = StoreRootStateResolved,
+    Getters extends StoreRootGettersResolved = StoreRootGettersResolved,
+  >(option?: _LoggerOption<State, Getters>): _Plugin<State, Getters>;
+
+  // Logger Fix End
   // ------------------------------------------------------------------
 
   // ==================================================================

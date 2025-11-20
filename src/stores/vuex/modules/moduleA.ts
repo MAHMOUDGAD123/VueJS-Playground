@@ -23,13 +23,14 @@ const moduleAAA2: ModuleAAA2 = {
   },
   actions: {
     actionAAA2(ctx, payload) {
-      console.log('actionAAA2:', payload ?? ' ✅');
+      console.log('actionAAA2', ' ✅');
       return payload?.valAAA2 ?? 'AAA2';
     },
   },
   mutations: {
     MUTATION_AAA2(state, payload) {
-      console.log(state.aaa2.replace('Module', 'Mutaion') + (payload?.valAAA2 ?? ' ✅'));
+      if (payload?.valAAA2) state.aaa2 = payload.valAAA2;
+      console.log(state.aaa2.replace('Module', 'Mutation'), '✅');
     },
   },
 };
@@ -57,21 +58,22 @@ const moduleAAA1: ModuleAAA1 = {
     actionAAA1: {
       root: true,
       handler: (ctx, payload) => {
-        console.log('actionAAA1:', payload ?? ' ✅');
+        console.log('actionAAA1', ' ✅');
         return payload?.valAAA1 ?? 'AAA1';
       },
     },
   },
   mutations: {
     MUTATION_AAA1(state, payload) {
-      console.log(state.aaa1.replace('Module', 'Mutaion') + (payload?.valAAA1 ?? ' ✅'));
+      if (payload?.valAAA1) state.aaa1 = payload.valAAA1;
+      console.log(state.aaa1.replace('Module', 'Mutation'), '✅');
     },
   },
 };
 
 type ModuleAA = _Module<
   'moduleAA',
-  'isolated',
+  'default',
   { aa: string },
   { getterAA: string },
   { actionAA: StoreActionRecord<{ valAA: string }, string> },
@@ -80,7 +82,7 @@ type ModuleAA = _Module<
 >;
 
 const moduleAA: ModuleAA = {
-  namespaced: true,
+  namespaced: false,
   state: {
     aa: 'Module AA',
   },
@@ -91,13 +93,14 @@ const moduleAA: ModuleAA = {
   },
   actions: {
     actionAA(ctx, payload) {
-      console.log('actionAA:', payload ?? ' ✅');
+      console.log('actionAA', ' ✅');
       return payload?.valAA ?? 'AA';
     },
   },
   mutations: {
     MUTATION_AA(state, payload) {
-      console.log(state.aa.replace('Module', 'Mutaion') + (payload?.valAA ?? ' ✅'));
+      if (payload?.valAA) state.aa = payload.valAA;
+      console.log(state.aa.replace('Module', 'Mutation'), '✅');
     },
   },
   modules: { moduleAAA1, moduleAAA2 },
@@ -120,21 +123,22 @@ const moduleA: ModuleA = {
   },
   getters: {
     getterA(state) {
-      return state.a.replace('Module', 'Getter') + ' ✅';
+      return state.a.replace('Module', 'Getter');
     },
   },
   actions: {
     actionA: {
       root: true,
       handler: async (ctx, payload) => {
-        console.log('actionA:', payload ?? ' ✅');
+        console.log('actionA', '✅');
         return payload?.valA ?? 'A';
       },
     },
   },
   mutations: {
     MUTATION_A(state, payload) {
-      console.log(state.a.replace('Module', 'Mutaion') + (payload?.valA ?? ' ✅'));
+      if (payload?.valA) state.a = payload.valA;
+      console.log(state.a.replace('Module', 'Mutation'), '✅');
     },
   },
   modules: { moduleAA },

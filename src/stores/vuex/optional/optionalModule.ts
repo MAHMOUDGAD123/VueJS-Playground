@@ -22,7 +22,7 @@ export const optionalModule: OptionalModule = {
   mutations: {
     OPTIONAL_MUTATION(state, payload) {
       console.log(
-        state.optionalState.replace('Module', 'Mutaion') + (payload?.vaoptionalVal ?? ' ✅'),
+        state.optionalState.replace('Module', 'Mutation') + (payload?.vaoptionalVal ?? ' ✅'),
       );
     },
   },

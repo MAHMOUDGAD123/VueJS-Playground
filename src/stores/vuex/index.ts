@@ -1,7 +1,10 @@
 import { rand } from '@/assets/tools/helpers';
 import { createStore } from 'vuex';
-import moduleA from './modules/moduleA';
-import moduleB from './modules/moduleB';
+import moduleA from '@/stores/vuex/modules/moduleA';
+import moduleB from '@/stores/vuex/modules/moduleB';
+import { loggerPlugin } from './plugins/logger';
+
+const plugins = import.meta.env.DEV ? [loggerPlugin] : [];
 
 export const vuexStore = createStore({
   strict: true,
@@ -23,14 +26,15 @@ export const vuexStore = createStore({
 
   actions: {
     updateName(ctx, name) {
-      // console.log('updateName:', ' ✅');
+      console.log('updateName', '✅');
       ctx.commit('UPDATE_NAME', name);
       return true;
     },
     updateAge(ctx, age) {
       console.log('updateAge', '✅');
       ctx.commit('UPDATE_AGE', age);
-      return 'yes';
+
+      return age && age.value < 25 ? 'yes' : 'no';
     },
   },
 
@@ -46,5 +50,5 @@ export const vuexStore = createStore({
 
   modules: { moduleA, moduleB },
 
-  // plugins: [testPlugin],
+  plugins,
 });

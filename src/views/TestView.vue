@@ -1,59 +1,32 @@
 <script lang="ts">
+  import { rand } from '@/assets/tools/helpers';
   import CustomFieldset from '@/components/_global/CustomFieldset.vue';
+  import { createNamespacedHelpers } from 'vuex';
 
-  // @ts-ignore
-
-  // const test: ModulesMutationsMapResolved['moduleAAA1'] = {};
+  const { mapActions } = createNamespacedHelpers('moduleA');
 
   export default {
     components: { CustomFieldset },
 
-    // computed: {
-    //   // State
-    //   ...mapState('moduleA/moduleAA/moduleAAA1', ['aaa1']),
-    //   ...mapState('moduleA/moduleAA/moduleAAA1', {
-    //     someData: 'aa',
-    //     moduleName(state, getters) {
-    //       // console.log({ state, getters });
-    //       return state.aaa1;
-    //     },
-    //   }),
+    data: () => ({
+      names: ['Ali', 'Reem', 'Amira'],
+    }),
 
-    //   // Getters
-    //   ...mapGetters('moduleA/moduleAA/moduleAAA1', ['getterAAA1']),
-    //   ...mapGetters('moduleA/moduleAA/moduleAAA1', {
-    //     _getterAAA1: 'getterAAA1',
-    //   }),
-    // },
+    methods: {
+      ...mapActions({
+        updateInfo(dispatch, name: { fname: string; lname: string }, age: number) {
+          dispatch('updateName', { ...name }, { root: true });
+          dispatch('updateAge', { value: age }, { root: true });
+        },
+      }),
 
-    // methods: {
-    //   // Actions
-    //   ...mapActions('moduleA/moduleAA/moduleAAA2', ['actionAAA2']),
-    //   ...mapActions('moduleA/moduleAA/moduleAAA2', {
-    //     _actionAAA2: 'actionAAA2',
-    //     __actionAAA2(dispatch) {
-    //       console.log(dispatch);
-    //       dispatch('actionAAA2');
-    //     },
-    //   }),
-    //   // Mutations
-    //   ...mapMutations('moduleA/moduleAA/moduleAAA2', ['MUTATION_AAA2']),
-    //   ...mapMutations('moduleA/moduleAA/moduleAAA2', {
-    //     _MUTATION_AAA2: 'MUTATION_AAA2',
-    //     __MUTATION_AAA2(commit) {
-    //       commit('MUTATION_AAA2');
-    //     },
-    //   }),
-
-    //   actionsAndMutations() {
-    //     this.actionAAA2();
-    //     this._actionAAA2();
-    //     this.__actionAAA2();
-    //     this.MUTATION_AAA2();
-    //     this._MUTATION_AAA2();
-    //     this.__MUTATION_AAA2();
-    //   },
-    // },
+      mappedFunctions() {
+        console.clear();
+        const n = rand({ min: 0, max: 2 });
+        const age = rand({ min: 19, max: 25 });
+        this.updateInfo({ fname: this.names[n], lname: 'Gad' }, age);
+      },
+    },
   };
 </script>
 
@@ -77,15 +50,12 @@
     <AppRoute route-name="test">
       <CustomFieldset class="mx-auto max-w-2xl text-center" :icon="{ iconSrc: 'vuex' }">
         <div class="flex flex-row flex-wrap justify-center gap-3">
-          <div class="custom-output text-xl">{{ $store.getters.fullName }}</div>
-          <!-- <div class="custom-output text-xl">{{ aaa1 }}</div> -->
-          <!-- <div class="custom-output text-xl">{{ moduleName }}</div> -->
-          <!-- <div class="custom-output text-xl">{{ getterAAA1 }}</div> -->
-          <!-- <div class="custom-output text-xl">{{ _getterAAA1 }}</div> -->
+          <div class="custom-output text-xl">{{ $store.getters.allInfo }}</div>
         </div>
-        <!-- <button class="custom-button text-primary text-2xl" @click="actionsAndMutations">
-          <i class="fa-solid fa-circle-arrow-up"></i>
-        </button> -->
+
+        <button class="custom-button text-primary font-saira text-2xl" @click="mappedFunctions">
+          M
+        </button>
       </CustomFieldset>
     </AppRoute>
 

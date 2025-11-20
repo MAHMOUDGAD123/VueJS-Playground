@@ -37,7 +37,7 @@ export const rand = ({
   max?: number;
   fraction?: boolean;
 }) => {
-  const n = Math.random() * (max - min) + min;
+  const n = Math.random() * (max - min + 1) + min;
   return fraction ? n : n >>> 0;
 };
 
