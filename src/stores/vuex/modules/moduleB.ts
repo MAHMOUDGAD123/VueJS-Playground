@@ -1,4 +1,4 @@
-import type { _Module, StoreActionRecord } from 'vuex';
+import type { _Module, StoreActionRecord } from 'strict-vuex';
 
 type ModuleBBB = _Module<
   'moduleBBB',

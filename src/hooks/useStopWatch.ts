@@ -2,7 +2,7 @@ import { computed, onScopeDispose, onUnmounted, ref } from 'vue';
 
 export const useStopWatch = () => {
   // Data
-  let interval = NaN;
+  let interval: NodeJS.Timeout;
   let startPoint = 0;
   let pausePoint = 0;
   const _count = ref('0.0');

@@ -7,7 +7,7 @@ import { customRef } from 'vue';
  * @param delay A delay in ms @default 300
  */
 export const useDebouncedRef = <T>(val: T, delay: number = 300) => {
-  let timeout: number = NaN;
+  let timeout: NodeJS.Timeout;
 
   return customRef<T>((track, trigger) => ({
     get() {

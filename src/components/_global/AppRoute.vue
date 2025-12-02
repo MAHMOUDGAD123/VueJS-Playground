@@ -25,7 +25,7 @@
   }>();
 
   const shouldLoaderRender = ref(false);
-  let timeoutId = NaN;
+  let timeoutId: NodeJS.Timeout;
 
   onUnmounted(() => {
     clearTimeout(timeoutId);

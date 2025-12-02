@@ -1,7 +1,6 @@
 import '@/assets/styles/main.css';
 import '@/assets/fa/css/all.min.css';
 import { createApp } from 'vue';
-import { createPinia } from 'pinia';
 import { router } from '@/router';
 import { createEventBus } from '@/plugins/event-bus';
 import font from '@/directives/font';
@@ -13,11 +12,12 @@ import AppRoute from '@/components/_global/AppRoute.vue';
 import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
 import { createMyData } from '@/stores/composable/global';
 import { vuexStore } from './stores/vuex';
+import { pinia } from './stores/pinia';
 
 const app = createApp(App);
 
 app.use(router); // vue router
-app.use(createPinia()); // pinia
+app.use(pinia); // pinia
 app.use(vuexStore); // vuex
 app.use(createEventBus()); // event bus
 app.use(createMyData()); // composable global store

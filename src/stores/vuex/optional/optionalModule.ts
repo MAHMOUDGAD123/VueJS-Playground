@@ -1,4 +1,4 @@
-import type { _Module, StoreActionRecord } from 'vuex';
+import type { _Module, StoreActionRecord } from 'strict-vuex';
 
 export type OptionalModule = _Module<
   'optionalModule',
@@ -6,7 +6,7 @@ export type OptionalModule = _Module<
   { optionalState: string },
   { optionalGetter: string },
   { optionalAction: StoreActionRecord<{ optionalVal: string }, string> },
-  { OPTIONAL_MUTATION: { vaoptionalVal: string } }
+  { OPTIONAL_MUTATION: { optionalVal: string } }
 >;
 
 export const optionalModule: OptionalModule = {
@@ -22,7 +22,7 @@ export const optionalModule: OptionalModule = {
   mutations: {
     OPTIONAL_MUTATION(state, payload) {
       console.log(
-        state.optionalState.replace('Module', 'Mutation') + (payload?.vaoptionalVal ?? ' ✅'),
+        state.optionalState.replace('Module', 'Mutation') + (payload?.optionalVal ?? ' ✅'),
       );
     },
   },

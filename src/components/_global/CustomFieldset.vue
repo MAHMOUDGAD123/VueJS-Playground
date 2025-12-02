@@ -14,6 +14,7 @@
     | 'pinia'
     | 'primevue'
     | 'vitejs'
+    | 'vitest'
     | 'vuerouter'
     | 'vuetify'
     | 'vueuse';
@@ -76,7 +77,7 @@
     <div
       v-if="icon"
       :class="[
-        'border-primary absolute aspect-square w-12 rounded-full border-5 bg-black p-2',
+        'border-primary absolute flex aspect-square w-12 place-content-center rounded-full border-5 bg-black p-2',
         resolveIconPosition(),
       ]"
     >

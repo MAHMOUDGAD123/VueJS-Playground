@@ -38,11 +38,12 @@
         const { msg, timeout } = familyMap[from as MessageFrom];
 
         clearTimeout(this[timeout]);
+
         this[msg] = '';
         this[msg] = `Hi, ${from.toUpperCase()}`;
         this[timeout] = setTimeout(() => {
           this[msg] = '';
-        }, 5000);
+        }, 5000) as unknown as number;
       },
     },
 

@@ -1,4 +1,4 @@
-import type { _Plugin, ModuleTypeUnion, ValidModulePaths } from 'vuex';
+import type { _Plugin, ModuleTypeUnion, ValidModulePaths } from 'strict-vuex';
 
 export const testPlugin: _Plugin = async (store) => {
   const modules = import.meta.glob('@/stores/vuex/modules/*.ts', { eager: true });

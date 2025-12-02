@@ -1,4 +1,4 @@
-import type { _Module, StoreActionRecord } from 'vuex';
+import type { _Module, StoreActionRecord } from 'strict-vuex';
 import type { OptionalModule } from '@/stores/vuex/optional/optionalModule';
 
 type ModuleAAA2 = _Module<
@@ -8,14 +8,14 @@ type ModuleAAA2 = _Module<
   { getterAAA2: string },
   { actionAAA2: StoreActionRecord<{ valAAA2: string }, string> },
   { MUTATION_AAA2: { valAAA2: string } },
-  { optionalModuleAAA: OptionalModule }
+  { optionalModuleAAA?: OptionalModule }
 >;
 
 const moduleAAA2: ModuleAAA2 = {
   namespaced: true,
-  state: {
+  state: () => ({
     aaa2: 'Module AAA2',
-  },
+  }),
   getters: {
     getterAAA2(state) {
       return state.aaa2.replace('Module', 'Getter');
@@ -46,9 +46,9 @@ type ModuleAAA1 = _Module<
 
 const moduleAAA1: ModuleAAA1 = {
   namespaced: true,
-  state: {
+  state: () => ({
     aaa1: 'Module AAA1',
-  },
+  }),
   getters: {
     getterAAA1(state) {
       return state.aaa1.replace('Module', 'Getter');
@@ -73,7 +73,7 @@ const moduleAAA1: ModuleAAA1 = {
 
 type ModuleAA = _Module<
   'moduleAA',
-  'default',
+  'isolated',
   { aa: string },
   { getterAA: string },
   { actionAA: StoreActionRecord<{ valAA: string }, string> },
@@ -82,10 +82,10 @@ type ModuleAA = _Module<
 >;
 
 const moduleAA: ModuleAA = {
-  namespaced: false,
-  state: {
+  namespaced: true,
+  state: () => ({
     aa: 'Module AA',
-  },
+  }),
   getters: {
     getterAA(state) {
       return state.aa.replace('Module', 'Getter');
@@ -111,16 +111,16 @@ export type ModuleA = _Module<
   'isolated',
   { a: string },
   { getterA: string },
-  { actionA: StoreActionRecord<{ valA: string }, string, true> },
+  { actionA: StoreActionRecord<{ valA: string }, string> },
   { MUTATION_A: { valA: string } },
   { moduleAA: ModuleAA; optionalModule?: OptionalModule }
 >;
 
 const moduleA: ModuleA = {
   namespaced: true,
-  state: {
+  state: () => ({
     a: 'Module A',
-  },
+  }),
   getters: {
     getterA(state) {
       return state.a.replace('Module', 'Getter');
@@ -128,7 +128,7 @@ const moduleA: ModuleA = {
   },
   actions: {
     actionA: {
-      root: true,
+      root: false,
       handler: async (ctx, payload) => {
         console.log('actionA', '✅');
         return payload?.valA ?? 'A';

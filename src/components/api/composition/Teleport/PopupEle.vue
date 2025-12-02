@@ -10,7 +10,7 @@
     close: [id: string];
   }>();
 
-  let timeoutId = NaN;
+  let timeoutId: NodeJS.Timeout;
 
   onMounted(() => {
     timeoutId = setTimeout(() => {

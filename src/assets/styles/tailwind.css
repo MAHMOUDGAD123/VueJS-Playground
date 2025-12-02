@@ -322,6 +322,10 @@
       @apply bg-primary60;
     }
 
+    &:focus-visible {
+      @apply animate-pulse;
+    }
+
     &.router-link-active {
       &::before {
         transform: scaleX(1);

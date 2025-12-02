@@ -1,26 +1,31 @@
-import { rand } from '@/assets/tools/helpers';
 import { createStore } from 'vuex';
-import moduleA from '@/stores/vuex/modules/moduleA';
-import moduleB from '@/stores/vuex/modules/moduleB';
-import { loggerPlugin } from './plugins/logger';
+import { rand } from '@/assets/tools/helpers';
+import moduleA, { type ModuleA } from '@/stores/vuex/modules/moduleA';
+import moduleB, { type ModuleB } from '@/stores/vuex/modules/moduleB';
 
-const plugins = import.meta.env.DEV ? [loggerPlugin] : [];
+// const plugins = import.meta.env.DEV ? [loggerPlugin] : [];
 
 export const vuexStore = createStore({
   strict: true,
+  devtools: true,
+  // plugins,
 
   state: () => ({
     fname: 'Mahmoud',
     lname: 'Gad',
     age: 28,
+    count: 0,
   }),
 
   getters: {
     fullName(state) {
       return `${state.fname} ${state.lname}`;
     },
-    allInfo(state, getters) {
-      return `${getters.fullName} - (${state.age})`;
+    allInfo(state) {
+      return `${state.fname} - (${state.age})`;
+    },
+    doubleCount(state) {
+      return state.count * 2;
     },
   },
 
@@ -36,6 +41,9 @@ export const vuexStore = createStore({
 
       return age && age.value < 25 ? 'yes' : 'no';
     },
+    increment(ctx) {
+      ctx.commit('INCREMENT');
+    },
   },
 
   mutations: {
@@ -46,9 +54,58 @@ export const vuexStore = createStore({
       state.fname = name?.fname ?? 'Ali';
       state.lname = name?.lname ?? 'Gad';
     },
+    INCREMENT: (state) => ++state.count * 2,
   },
 
   modules: { moduleA, moduleB },
-
-  plugins,
 });
+
+declare module 'strict-vuex' {
+  interface VuexStoreRootState {
+    fname: string;
+    lname: string;
+    age: number;
+    count: number;
+  }
+
+  interface VuexStoreRootGetters {
+    fullName: string;
+    allInfo: string;
+    doubleCount: number;
+  }
+
+  interface VuexStoreRootActions {
+    updateName: StoreActionRecord<{ fname: string; lname: string }, boolean>;
+    updateAge: StoreActionRecord<{ value: number }, 'yes' | 'no'>;
+    increment: StoreActionRecord<null, void>;
+  }
+
+  interface VuexStoreRootMutations {
+    UPDATE_NAME: {
+      fname: string;
+      lname: string;
+    };
+    UPDATE_AGE: {
+      value: number;
+    };
+    INCREMENT: null;
+  }
+
+  interface VuexStoreRootModules {
+    moduleA: ModuleA;
+    moduleB: ModuleB;
+  }
+}
+
+/* if (import.meta.hot) {
+  import.meta.hot.accept();
+  import.meta.hot.accept(['./modules/moduleA.ts', './modules/moduleB.ts'], async () => {
+    vuexStore.hotUpdate({
+      modules: {
+        moduleA: (await import('./modules/moduleA')).default,
+        moduleB: (await import('./modules/moduleB')).default,
+      },
+    });
+  });
+}
+*/

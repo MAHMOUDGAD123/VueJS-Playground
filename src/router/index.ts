@@ -4,16 +4,17 @@ import {
   isNavigationFailure,
   NavigationFailureType,
 } from 'vue-router';
-import { routes } from '@/router/routes';
 import {
   navigateToRouterErrorPage,
   navigateToNavigationFailurePage,
   resolveTitle,
 } from '@/tools/router-tools';
+import { routes } from '@/router/routes';
+import type { RouteRecordRaw } from 'vue-router';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes: routes as RouteRecordRaw[],
   strict: true, // strict route path match with no trailling slash
   scrollBehavior: (to, from, savedPosition) => {
     return savedPosition ?? { top: 0, behavior: 'smooth' };

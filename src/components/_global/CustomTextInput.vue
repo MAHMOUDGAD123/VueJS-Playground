@@ -1,6 +1,10 @@
 <script setup lang="ts">
   type EventModifiers = 'trim' | 'number' | 'lazy' | 'capitalize' | 'uppercase' | 'lowercase';
 
+  defineOptions({
+    inheritAttrs: false,
+  });
+
   const props = defineProps<{
     label?: string;
     labelWidthInCh?: number | string;
@@ -8,6 +12,7 @@
     name?: string;
     defaultPlaceholder?: string;
     textarea?: boolean;
+    number?: boolean;
   }>();
 
   const [modelValue, modelModifiers] = defineModel<string | number, EventModifiers>();
@@ -55,6 +60,8 @@
     </div>
 
     <component
+      :type="number && !textarea ? 'number' : 'text'"
+      v-bind="$attrs"
       :is="textarea ? 'textarea' : 'input'"
       :name="props.name"
       :id="props.id"

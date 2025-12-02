@@ -57,7 +57,8 @@ declare module 'vue-router' {
     query: Query;
     /**
      * Route record props
-     * - CASE (1): When used with single view Route records must be in the next form:
+     *
+     * CASE (1): When used with single view Route records must be in the next form:
      * @example
      * ```ts
      * type Props = {
@@ -65,7 +66,7 @@ declare module 'vue-router' {
      *  Prop2: string | number;
      * }
      * ```
-     * - CASE (2): When  used with multi view Route records must be in the next form:
+     * CASE (2): When used with multi view Route records must be in the next form:
      * @example
      * ```ts
      * type ComponentsProps = {
@@ -193,8 +194,6 @@ declare module 'vue-router' {
 
     scrollOptim: CustomRouteInfo<['/scroll-optim'], ['/scroll-optim'], 'Scroll Optimizer'>;
 
-    vuex: CustomRouteInfo<['/vuex'], ['/vuex'], 'Vuex'>;
-
     notFound: CustomRouteInfo<
       ['/:pathMatch(.*)*'],
       never,
@@ -227,28 +226,19 @@ declare module 'vue-router' {
       }
     >;
 
-    test: CustomRouteInfo<['/test'], ['/test'], 'Test', never, 'testChild'>;
+    sm: CustomRouteInfo<['/sm'], ['/sm'], 'State Management', never, 'smViews'>;
 
-    testChild: CustomRouteInfo<
-      ['/test', ':first?-:last?'],
+    smViews: CustomRouteInfo<
+      ['views'],
+      ['views'],
+      'State Management Views',
       never,
-      'Test Views',
       never,
       never,
-      {
-        first?: string | number;
-        last?: string | number;
-      },
       never,
       {
-        viewOne: {
-          prop1?: string | number;
-          prop2?: string | number;
-        };
-        viewTwo: {
-          prop3?: string | number;
-          prop4?: string | number;
-        };
+        vuexView: null;
+        piniaView: null;
       }
     >;
   }
