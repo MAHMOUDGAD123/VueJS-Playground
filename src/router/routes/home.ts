@@ -1,9 +1,9 @@
+import { defineRouteRecord } from 'strict-vue-router';
 import HomeView from '@/views/HomeView.vue';
-import type { _RouteRecordRaw } from 'vue-router';
 
-export const homeRuoteRecord = {
-  path: '/',
+export const homeRuoteRecord = defineRouteRecord<'home'>({
   name: 'home',
+  path: '/',
   component: HomeView,
   meta: {
     title: {
@@ -11,4 +11,4 @@ export const homeRuoteRecord = {
     },
     isNav: false,
   },
-} satisfies _RouteRecordRaw<'home'>;
+});

@@ -1,7 +1,7 @@
+import { defineRouteRecord } from 'strict-vue-router';
 import EventBusView from '@/views/EventBusView.vue';
-import type { _RouteRecordRaw } from 'vue-router';
 
-export const eventBusRouteRecord = {
+export const eventBusRouteRecord = defineRouteRecord<'eventBus'>({
   path: '/event-bus',
   name: 'eventBus',
   component: EventBusView,
@@ -12,4 +12,4 @@ export const eventBusRouteRecord = {
       default: 'Event Bus',
     },
   },
-} satisfies _RouteRecordRaw<'eventBus'>;
+});

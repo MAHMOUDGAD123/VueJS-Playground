@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import { rand } from '@/assets/tools/helpers';
-import moduleA, { type ModuleA } from '@/stores/vuex/modules/moduleA';
-import moduleB, { type ModuleB } from '@/stores/vuex/modules/moduleB';
+import moduleA from '@/stores/vuex/modules/moduleA';
+import moduleB from '@/stores/vuex/modules/moduleB';
 
 // const plugins = import.meta.env.DEV ? [loggerPlugin] : [];
 
@@ -59,43 +59,6 @@ export const vuexStore = createStore({
 
   modules: { moduleA, moduleB },
 });
-
-declare module 'strict-vuex' {
-  interface VuexStoreRootState {
-    fname: string;
-    lname: string;
-    age: number;
-    count: number;
-  }
-
-  interface VuexStoreRootGetters {
-    fullName: string;
-    allInfo: string;
-    doubleCount: number;
-  }
-
-  interface VuexStoreRootActions {
-    updateName: StoreActionRecord<{ fname: string; lname: string }, boolean>;
-    updateAge: StoreActionRecord<{ value: number }, 'yes' | 'no'>;
-    increment: StoreActionRecord<null, void>;
-  }
-
-  interface VuexStoreRootMutations {
-    UPDATE_NAME: {
-      fname: string;
-      lname: string;
-    };
-    UPDATE_AGE: {
-      value: number;
-    };
-    INCREMENT: null;
-  }
-
-  interface VuexStoreRootModules {
-    moduleA: ModuleA;
-    moduleB: ModuleB;
-  }
-}
 
 /* if (import.meta.hot) {
   import.meta.hot.accept();

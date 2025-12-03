@@ -93,7 +93,12 @@
             <i class="fa-solid fa-plus"></i>
           </button>
 
-          <CustomTextInput number label="Num" v-model.number="piniaWritableCount" />
+          <CustomTextInput
+            name="piniaState"
+            number
+            label="Num"
+            v-model.number="piniaWritableCount"
+          />
         </CustomFieldset>
 
         <CustomFieldset

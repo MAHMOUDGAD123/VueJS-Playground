@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { useRouter, type _RouteRecordRaw } from 'vue-router';
+  import { useRouter } from 'vue-router';
   import { ref } from 'vue';
+  import type { _RouteRecordRaw } from 'strict-vue-router';
 
   const router = useRouter();
   const newRouteExists = ref(router.hasRoute('newRoute'));

@@ -5,11 +5,11 @@ import UserRoute from '@/components/router/user/UserRoute.vue';
 import UsersRoute from '@/components/router/users/UsersRoute.vue';
 import DynamicRouteTest from '@/components/router/new-route/DynamicRouteTest.vue';
 import VueRouterView from '@/views/VueRouterView.vue';
-import type { _RouteRecordRaw } from 'vue-router';
+import { defineRouteRecord } from 'strict-vue-router';
 
-export const vueRouterRouteRecord = {
-  path: '/vue-router',
+export const vueRouterRouteRecord = defineRouteRecord<'vueRouter'>({
   name: 'vueRouter',
+  path: '/vue-router',
   alias: ['/router', '/router-test'],
   component: VueRouterView,
   meta: {
@@ -32,8 +32,8 @@ export const vueRouterRouteRecord = {
       },
       children: [
         {
-          path: ':userid((?:[1-9]|10\\))',
           name: 'user',
+          path: ':userid((?:[1-9]|10\\))',
           alias: [':userid((?:[1-9]|10\\))/profile'],
           component: UserRoute,
           meta: {
@@ -46,8 +46,8 @@ export const vueRouterRouteRecord = {
           },
           children: [
             {
-              path: 'posts/:postid((?:[1-9]|10\\))',
               name: 'userPost',
+              path: 'posts/:postid((?:[1-9]|10\\))',
               alias: [':postid((?:[1-9]|10\\))'],
               component: UserPostRoute,
               props: true, // Pass the params as props to the (UserPostRoute) compoent
@@ -62,11 +62,11 @@ export const vueRouterRouteRecord = {
                   ],
                 },
               },
-            } satisfies _RouteRecordRaw<'userPost'>,
+            },
           ],
-        } satisfies _RouteRecordRaw<'user'>,
+        },
       ],
-    } satisfies _RouteRecordRaw<'users'>,
+    },
     {
       name: 'posts',
       path: 'posts',
@@ -78,7 +78,7 @@ export const vueRouterRouteRecord = {
         },
       },
       children: [
-        {
+        defineRouteRecord<'post'>({
           name: 'post',
           path: ':postid((?:[1-9]|[1-9][0-9]|100\\))',
           component: PostRoute,
@@ -90,9 +90,9 @@ export const vueRouterRouteRecord = {
               propsMap: [['postid', 'params.postid']],
             },
           },
-        } satisfies _RouteRecordRaw<'post'>,
+        }),
       ],
-    } satisfies _RouteRecordRaw<'posts'>,
+    },
     {
       name: 'newRouteTest',
       path: 'new-route-test',
@@ -102,6 +102,6 @@ export const vueRouterRouteRecord = {
           default: 'New Route Test',
         },
       },
-    } satisfies _RouteRecordRaw<'newRouteTest'> as _RouteRecordRaw,
+    },
   ],
-} satisfies _RouteRecordRaw<'vueRouter'>;
+});

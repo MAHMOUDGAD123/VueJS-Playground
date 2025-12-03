@@ -1,9 +1,9 @@
 import VuexView from '@/components/state-management/VuexView.vue';
 import PiniaView from '@/components/state-management/PiniaView.vue';
 import SMView from '@/views/SMView.vue';
-import type { _RouteRecordRaw } from 'vue-router';
+import { defineRouteRecord } from 'strict-vue-router';
 
-export const testRouteRecord = {
+export const testRouteRecord = defineRouteRecord<'sm'>({
   path: '/sm',
   name: 'sm',
   component: SMView,
@@ -16,8 +16,8 @@ export const testRouteRecord = {
   },
   children: [
     {
-      path: 'views',
       name: 'smViews',
+      path: 'views',
       components: {
         vuexView: VuexView,
         piniaView: PiniaView,
@@ -28,6 +28,6 @@ export const testRouteRecord = {
         },
         isNav: false,
       },
-    } satisfies _RouteRecordRaw<'smViews'> as _RouteRecordRaw,
+    },
   ],
-} satisfies _RouteRecordRaw<'sm'>;
+});

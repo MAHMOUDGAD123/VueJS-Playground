@@ -1,7 +1,7 @@
+import { defineRouteRecord } from 'strict-vue-router';
 import ScrollOptimizerView from '@/views/ScrollOptimizerView.vue';
-import type { _RouteRecordRaw } from 'vue-router';
 
-export const scrollOptimizerRouteRecord = {
+export const scrollOptimizerRouteRecord = defineRouteRecord<'scrollOptim'>({
   path: '/scroll-optim',
   name: 'scrollOptim',
   component: ScrollOptimizerView,
@@ -12,4 +12,4 @@ export const scrollOptimizerRouteRecord = {
       default: 'Scroll Optimizer',
     },
   },
-} satisfies _RouteRecordRaw<'scrollOptim'>;
+});

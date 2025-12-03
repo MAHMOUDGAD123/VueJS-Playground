@@ -6,7 +6,6 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "incremental": true,
     "skipLibCheck": true,
-    "strict": true,
     "types": ["vitest/config", "vite/client"],
     "paths": {
       "@/*": ["./src/*"],

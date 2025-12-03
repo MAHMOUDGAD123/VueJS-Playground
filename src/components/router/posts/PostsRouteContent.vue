@@ -4,7 +4,7 @@
   import AppRoute from '@/components/_global/AppRoute.vue';
   import { isPROD } from '@/assets/tools/globals';
   import LoadingSkeleton from '@/components/_global/LoadingSkeleton.vue';
-  import type { From1To100 } from '@/types/routes';
+  import type { From1To100 } from '@/router/types';
 
   const posts = ref<PostData[] | null>(null);
   const error = ref<Error | null>(null);

@@ -1,7 +1,7 @@
+import { defineRouteRecord } from 'strict-vue-router';
 import OptVsCompView from '@/views/OptVsCompView.vue';
-import type { _RouteRecordRaw } from 'vue-router';
 
-export const optionVsCompositionRouteRecord = {
+export const optionVsCompositionRouteRecord = defineRouteRecord<'optVsComp'>({
   path: '/opt-vs-comp',
   name: 'optVsComp',
   component: OptVsCompView,
@@ -12,4 +12,4 @@ export const optionVsCompositionRouteRecord = {
     isNav: true,
     navLinkTitle: 'OptVsComp',
   },
-} satisfies _RouteRecordRaw<'optVsComp'>;
+});

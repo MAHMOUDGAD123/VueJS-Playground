@@ -4,17 +4,13 @@ import {
   isNavigationFailure,
   NavigationFailureType,
 } from 'vue-router';
-import {
-  navigateToRouterErrorPage,
-  navigateToNavigationFailurePage,
-  resolveTitle,
-} from '@/tools/router-tools';
+import { navigateToRouterErrorPage, navigateToNavigationFailurePage } from '@/tools/router-tools';
 import { routes } from '@/router/routes';
-import type { RouteRecordRaw } from 'vue-router';
+import { resolveRouteTitle } from 'strict-vue-router';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: routes as RouteRecordRaw[],
+  routes: routes,
   strict: true, // strict route path match with no trailling slash
   scrollBehavior: (to, from, savedPosition) => {
     return savedPosition ?? { top: 0, behavior: 'smooth' };
@@ -46,14 +42,14 @@ router.onError((err, to, from) => {
   navigateToRouterErrorPage(err, from, to);
 });
 
-router.afterEach((to, _, failure) => {
+router.afterEach((to, from, failure) => {
   // Set the page title
   if (isNavigationFailure(failure, NavigationFailureType.cancelled)) {
     return navigateToNavigationFailurePage(failure);
   }
 
   // set the page title
-  resolveTitle(to);
+  resolveRouteTitle(to);
 });
 
 export { router, routes };

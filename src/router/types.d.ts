@@ -1,100 +1,23 @@
-import 'vue-router';
 import type { RouteLocationNormalized } from 'vue-router';
 
 type From1To10 = RangeFromTo<1, 10>;
 type From1To100 = RangeFromTo<1, 100>;
 
 declare module 'vue-router' {
-  /**
-   * Custom Route Info
-   * @info Used with {@link CustomRouteMap}
-   */
-  type CustomRouteInfo<
-    RoutePath extends string[],
-    Path extends string[],
-    StaticTitle extends string = never,
-    DynamicTitle extends string = never,
-    ChildrenNames extends string = never,
-    Params extends Record<string, unknown> = never,
-    Query extends Record<string, unknown> = never,
-    Props extends Record<string, unknown> = never,
-    HistoryState extends Record<string, unknown> = never,
-    Hash extends `#${string}` = never,
-  > = {
+  // Extends route meta
+  interface RouteMeta {
     /**
-     * Route record path
-     * @example '/users/:id'
+     * Useed to check if this route can be used as a navigation link in the main nav bar
      */
-    routePath: RoutePath;
+    isNav?: boolean;
     /**
-     * Route location path
-     * @example '/users/1'
+     * A title used with RouterLink as text
      */
-    path: Path;
-    /**
-     * Route location meta record
-     * Default document.title value if the (dynamicTitle) is undefined
-     * @example 'Users'
-     */
-    staticTitle: StaticTitle;
-    /**
-     * Route location meta record
-     * Dynamic title string defined by you
-     * @example 'User <[userid]>'
-     */
-    dynamicTitle: DynamicTitle;
-    /**
-     * Route location children routes names
-     */
-    childrenNames: ChildrenNames;
-    /**
-     * Route location params
-     */
-    params: Params;
-    /**
-     * Route location query
-     */
-    query: Query;
-    /**
-     * Route record props
-     *
-     * CASE (1): When used with single view Route records must be in the next form:
-     * @example
-     * ```ts
-     * type Props = {
-     *  Prop1: string | number;
-     *  Prop2: string | number;
-     * }
-     * ```
-     * CASE (2): When used with multi view Route records must be in the next form:
-     * @example
-     * ```ts
-     * type ComponentsProps = {
-     *  viewOne: {
-     *    prop1: string;
-     *    prop2: string;
-     *  },
-     *  viewTwo: {
-     *    prop1: string;
-     *    prop2: string;
-     *  }
-     * }
-     * ```
-     */
-    props: Props;
-    /**
-     * Route location state
-     */
-    historyState: HistoryState;
-    /**
-     * Route location hash
-     */
-    hash: Hash;
-  };
+    navLinkTitle?: string;
+  }
+}
 
-  /**
-   * A custom route map defined by you.
-   */
+declare module 'strict-vue-router' {
   interface CustomRouteMap {
     home: CustomRouteInfo<['/'], ['/'], 'Home'>;
 
@@ -229,8 +152,8 @@ declare module 'vue-router' {
     sm: CustomRouteInfo<['/sm'], ['/sm'], 'State Management', never, 'smViews'>;
 
     smViews: CustomRouteInfo<
-      ['views'],
-      ['views'],
+      ['/sm', 'views'],
+      ['/sm', 'views'],
       'State Management Views',
       never,
       never,
@@ -239,7 +162,8 @@ declare module 'vue-router' {
       {
         vuexView: null;
         piniaView: null;
-      }
+      },
+      { state1: string; state2: string }
     >;
   }
 }

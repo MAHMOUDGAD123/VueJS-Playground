@@ -5,7 +5,7 @@
   import { lazyFetch } from '@/assets/tools/lazy-fetch';
   import { isPROD } from '@/assets/tools/globals';
   import CustomFieldset from '@/components/_global/CustomFieldset.vue';
-  import type { From1To10 } from '@/types/routes';
+  import type { From1To10 } from '@/router/types';
 
   const route = useRoute<'user'>();
   const params = route.params;

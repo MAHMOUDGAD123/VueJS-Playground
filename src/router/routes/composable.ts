@@ -1,9 +1,9 @@
+import { defineRouteRecord } from 'strict-vue-router';
 import ComposableView from '@/views/ComposableView.vue';
-import type { _RouteRecordRaw } from 'vue-router';
 
-export const composableRouteRecord = {
-  path: '/composable',
+export const composableRouteRecord = defineRouteRecord<'composable'>({
   name: 'composable',
+  path: '/composable',
   component: ComposableView,
   meta: {
     isNav: true,
@@ -12,4 +12,4 @@ export const composableRouteRecord = {
       default: 'Composable',
     },
   },
-} satisfies _RouteRecordRaw<'composable'>;
+});

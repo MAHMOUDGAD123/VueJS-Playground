@@ -1,7 +1,7 @@
+import { defineRouteRecord } from 'strict-vue-router';
 import NotFoundView from '@/views/NotFoundView.vue';
-import type { _RouteRecordRaw } from 'vue-router';
 
-export const notFoundRouteRecord = {
+export const notFoundRouteRecord = defineRouteRecord<'notFound'>({
   path: '/:pathMatch(.*)*',
   name: 'notFound',
   component: NotFoundView,
@@ -11,4 +11,4 @@ export const notFoundRouteRecord = {
     },
     isNav: false,
   },
-} satisfies _RouteRecordRaw<'notFound'>;
+});

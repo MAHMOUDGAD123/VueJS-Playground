@@ -1,8 +1,8 @@
 import { useErrorStore } from '@/stores/composable/error';
+import { defineRouteRecord } from 'strict-vue-router';
 import ErrorView from '@/views/ErrorView.vue';
-import type { _RouteRecordRaw } from 'vue-router';
 
-export const errorRouteRecord = {
+export const errorRouteRecord = defineRouteRecord<'error'>({
   path: '/error',
   name: 'error',
   component: ErrorView,
@@ -19,4 +19,4 @@ export const errorRouteRecord = {
     },
     isNav: false,
   },
-} satisfies _RouteRecordRaw<'error'> as _RouteRecordRaw;
+});

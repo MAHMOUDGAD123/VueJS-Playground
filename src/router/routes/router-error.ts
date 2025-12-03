@@ -1,8 +1,8 @@
 import { useNavigationErrorStore } from '@/stores/composable/navigation-error';
+import { defineRouteRecord } from 'strict-vue-router';
 import RouterErrorView from '@/views/RouterErrorView.vue';
-import type { _RouteRecordRaw } from 'vue-router';
 
-export const routerErrorRouteRecord = {
+export const routerErrorRouteRecord = defineRouteRecord<'routerError'>({
   path: '/router-error',
   name: 'routerError',
   component: RouterErrorView,
@@ -19,4 +19,4 @@ export const routerErrorRouteRecord = {
     },
     isNav: false,
   },
-} satisfies _RouteRecordRaw<'routerError'> as _RouteRecordRaw;
+});

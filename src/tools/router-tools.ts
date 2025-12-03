@@ -4,26 +4,6 @@ import { Logger } from './logger';
 import { router } from '@/router';
 import { useErrorStore } from '@/stores/composable/error';
 
-export const resolveTitle = (route: RouteLocationNormalized) => {
-  if (!route.meta) return;
-  if (route.meta.title.isDynamic && route.meta.title.pattern) {
-    let titleValue = route.meta.title.pattern as string;
-
-    route.meta.title.propsMap!.forEach(([prop, path]) => {
-      let propValue = route as unknown;
-      const pathArray = path.split('.');
-      pathArray.forEach((propKey) => {
-        // @ts-ignore
-        propValue = propValue[propKey];
-      });
-      titleValue = titleValue!.replace(`<[${prop}]>`, `${propValue}`);
-    });
-    document.title = titleValue;
-  } else {
-    document.title = route.meta.title.default;
-  }
-};
-
 export const navigateToErrorPage = (err: Error, route: RouteLocationNormalized) => {
   const errorStore = useErrorStore();
 
